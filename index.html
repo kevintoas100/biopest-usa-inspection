@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0033cc">
+<meta name="theme-color" content="#af0103">
 <title>Fleasty Boys — Pest Inspection Report</title>
 <style>
   :root{
-    --brand:#0033cc; --brand-2:#1d4ed8; --brand-3:#2563eb;
-    --link:#0071e3; --link-hover:#0077ED; --primary-dark:#001a66;
+    --brand:#af0103; --brand-2:#d11a1c; --brand-3:#e23b3d;
+    --link:#b3120f; --link-hover:#c81a1a; --primary-dark:#6b0102;
     --bg:#fbfbfd; --surface:#ffffff; --surface-2:#f5f5f7; --surface-3:#ebebef;
     --ink:#1d1d1f; --ink-2:#424245; --ink-3:#6e6e73; --ink-4:#86868b;
     --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.05);
@@ -29,14 +29,14 @@
 
   /* ── Brand header ── */
   header.masthead{
-    background:radial-gradient(120% 90% at 50% 0%, #1d4ed8 0%, #0033cc 46%, #001a66 100%);
+    background:radial-gradient(120% 90% at 50% 0%, #d11a1c 0%, #af0103 46%, #6b0102 100%);
     color:#fff; padding:30px 16px 26px; text-align:center;
   }
   .brandrow{ display:flex; align-items:center; justify-content:center; gap:12px; }
   .dots{ display:flex; flex-direction:column; gap:6px; }
   .dots span{ width:11px; height:11px; border-radius:50%; background:#fff; display:block; }
   .wordmark{ font-size:34px; font-weight:800; letter-spacing:-.03em; line-height:1; display:flex; align-items:center; }
-  .wordmark .pest{ background:#fff; color:#0033cc; padding:4px 9px; margin-left:6px; border-radius:8px; }
+  .wordmark .pest{ background:#fff; color:#af0103; padding:4px 9px; margin-left:6px; border-radius:8px; }
   /* Brand logo — white-faced 3D wordmark sits directly on the blue header */
   .brandlogo{ display:flex; justify-content:center; align-items:center; }
   .brandlogo .logo{ display:block; height:70px; width:auto; max-width:88vw; }
@@ -159,7 +159,7 @@
   .minirm{ position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; cursor:pointer; font-size:11px; line-height:1; }
   .miniadd{ margin-top:8px; display:inline-flex; align-items:center; gap:7px; background:var(--surface-2); color:var(--brand);
     border:1.5px solid var(--line); border-radius:999px; padding:8px 14px; font-family:inherit; font-weight:600; font-size:13px; cursor:pointer; }
-  .miniadd:hover{ background:#eef2ff; }
+  .miniadd:hover{ background:#fdecec; }
 
   /* ── Zones ── */
   .zone{ padding:14px 0; border-bottom:1px solid var(--line-2); }
@@ -169,7 +169,7 @@
 
   /* ── Photos ── */
   .uploadbtn{ display:inline-flex; align-items:center; gap:8px; margin-top:14px;
-    background:linear-gradient(135deg,#0033cc,#1d4ed8); color:#fff; border:none; cursor:pointer;
+    background:linear-gradient(135deg,#af0103,#d11a1c); color:#fff; border:none; cursor:pointer;
     font-family:inherit; font-size:14px; font-weight:600; padding:11px 18px; border-radius:999px; }
   .photogrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin-top:16px; }
   .photo{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface); }
@@ -189,7 +189,7 @@
   .finding .frm{ background:none; border:none; color:var(--bad); cursor:pointer; font-size:12px; font-weight:600; font-family:inherit; padding:0; margin-top:4px; }
   .addbtn{ margin-top:14px; background:var(--surface-2); color:var(--brand); border:1.5px dashed var(--brand-3);
     border-radius:var(--r-md); padding:11px; width:100%; cursor:pointer; font-family:inherit; font-weight:600; font-size:13.5px; }
-  .addbtn:hover{ background:#eef2ff; }
+  .addbtn:hover{ background:#fdecec; }
 
   /* ── Regulatory info card ── */
   .infocard{ background:var(--surface-2); border:1px solid var(--line); border-radius:var(--r-lg); padding:16px 18px; margin-top:16px; }
@@ -212,7 +212,7 @@
     border-top:1px solid var(--line); padding:12px 16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
   .actionbar .status{ position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:11.5px; color:var(--ink-4); }
   .btn{ font-family:inherit; font-size:14px; font-weight:600; border-radius:999px; padding:11px 20px; cursor:pointer; border:none; transition:all .12s; }
-  .btn.primary{ background:linear-gradient(135deg,#0033cc,#1d4ed8); color:#fff; }
+  .btn.primary{ background:linear-gradient(135deg,#af0103,#d11a1c); color:#fff; }
   .btn.primary:hover{ filter:brightness(1.06); }
   .btn.ghost{ background:var(--surface-2); color:var(--ink-2); }
   .btn.ghost:hover{ background:var(--surface-3); }
