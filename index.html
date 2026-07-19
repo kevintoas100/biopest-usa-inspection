@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0033cc">
+<title>BioPest USA — Pest Inspection Report</title>
+<style>
+  :root{
+    --brand:#0033cc; --brand-2:#1d4ed8; --brand-3:#2563eb;
+    --link:#0071e3; --link-hover:#0077ED; --primary-dark:#001a66;
+    --bg:#fbfbfd; --surface:#ffffff; --surface-2:#f5f5f7; --surface-3:#ebebef;
+    --ink:#1d1d1f; --ink-2:#424245; --ink-3:#6e6e73; --ink-4:#86868b;
+    --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.05);
+    --good:#1f9d55; --good-soft:#e6f4ec; --warn:#b8860b; --warn-soft:#fdf3d6;
+    --bad:#c0392b; --bad-soft:#fce8e6; --orange:#c2410c; --orange-soft:#fee9d8;
+    --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:22px;
+    color-scheme: light;
+  }
+  *{box-sizing:border-box}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; letter-spacing:-.011em;
+    line-height:1.5;
+  }
+  .wrap{ max-width:940px; margin:0 auto; padding:0 16px 140px; }
+
+  /* ── Brand header ── */
+  header.masthead{
+    background:radial-gradient(120% 90% at 50% 0%, #1d4ed8 0%, #0033cc 46%, #001a66 100%);
+    color:#fff; padding:30px 16px 26px; text-align:center;
+  }
+  .brandrow{ display:flex; align-items:center; justify-content:center; gap:12px; }
+  .dots{ display:flex; flex-direction:column; gap:6px; }
+  .dots span{ width:11px; height:11px; border-radius:50%; background:#fff; display:block; }
+  .wordmark{ font-size:34px; font-weight:800; letter-spacing:-.03em; line-height:1; display:flex; align-items:center; }
+  .wordmark .pest{ background:#fff; color:#0033cc; padding:4px 9px; margin-left:6px; border-radius:8px; }
+  .masthead .kicker{ margin-top:14px; font-size:11px; letter-spacing:.32em; font-weight:600; color:rgba(255,255,255,.62); text-transform:uppercase; }
+  .masthead h1{ margin:8px 0 0; font-size:22px; font-weight:600; letter-spacing:-.02em; }
+  .masthead .sub{ margin-top:4px; font-size:13.5px; color:rgba(255,255,255,.75); }
+
+  /* contact strip (editable) — high specificity so the generic form-input
+     rule below (light-grey, width:100%) never overrides these. */
+  .masthead .contact{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:18px auto 0; max-width:600px; }
+  .masthead .contact input{
+    width:auto; flex:1 1 150px; max-width:260px; min-width:0;
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.32); color:#fff;
+    border-radius:10px; padding:8px 12px; font-size:12.5px; text-align:center; font-family:inherit;
+  }
+  .masthead .contact input::placeholder{ color:rgba(255,255,255,.6); }
+  .masthead .contact input:focus{ outline:none; border-color:#fff; background:rgba(255,255,255,.22); }
+
+  /* ── Usage note (screen only) ── */
+  .usage{
+    max-width:940px; margin:14px auto 0; padding:10px 14px; font-size:12.5px; color:var(--ink-3);
+    background:var(--warn-soft); border:1px solid rgba(184,134,11,.25); border-radius:var(--r-md);
+    display:flex; gap:8px; align-items:flex-start;
+  }
+
+  /* ── Section cards ── */
+  section.card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--r-xl);
+    padding:22px; margin-top:16px; box-shadow:0 1px 2px rgba(0,0,0,.03);
+  }
+  .card > .sec-head{ display:flex; align-items:baseline; gap:10px; margin:0 0 4px; }
+  .sec-num{
+    flex:none; width:26px; height:26px; border-radius:8px; background:var(--brand);
+    color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;
+    align-self:center;
+  }
+  .card h2{ font-size:18px; font-weight:600; letter-spacing:-.02em; margin:0; }
+  .card .hint{ font-size:12.5px; color:var(--ink-4); margin:2px 0 0 36px; }
+  .eyebrow{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-4); }
+
+  /* ── Fields ── */
+  .grid{ display:grid; gap:14px; margin-top:16px; }
+  .g2{ grid-template-columns:1fr 1fr; }
+  .g3{ grid-template-columns:1fr 1fr 1fr; }
+  @media (max-width:640px){ .g2,.g3{ grid-template-columns:1fr; } }
+  .field{ display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .field label{ font-size:12px; font-weight:600; color:var(--ink-3); letter-spacing:-.005em; }
+  input[type=text],input[type=date],input[type=time],input[type=email],input[type=tel],input[type=number],select,textarea{
+    width:100%; font-family:inherit; font-size:14px; color:var(--ink);
+    background:var(--surface-2); border:1.5px solid transparent; border-radius:var(--r-md);
+    padding:10px 12px; transition:border-color .12s, background .12s;
+  }
+  textarea{ resize:vertical; min-height:70px; line-height:1.45; }
+  input:focus,select:focus,textarea:focus{ outline:none; border-color:var(--brand-3); background:#fff; }
+  select{ appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236e6e73' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer;
+  }
+
+  /* ── Rating / choice chips ── */
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; }
+  .chips button{
+    font-family:inherit; font-size:12.5px; font-weight:500; color:var(--ink-2);
+    background:var(--surface-2); border:1.5px solid transparent; border-radius:999px;
+    padding:7px 13px; cursor:pointer; transition:all .12s; white-space:nowrap;
+  }
+  .chips button:hover{ background:var(--surface-3); }
+  .chips button.on{ color:#fff; }
+  .chips button.on[data-tone=good]{ background:var(--good); }
+  .chips button.on[data-tone=warn]{ background:var(--warn); }
+  .chips button.on[data-tone=bad]{ background:var(--bad); }
+  .chips button.on[data-tone=crit]{ background:#7f1d1d; }
+  .chips button.on[data-tone=neutral]{ background:var(--brand); }
+
+  /* ── Checklist (present/missing) ── */
+  .checklist{ display:flex; flex-direction:column; gap:2px; margin-top:14px; }
+  .clitem{ display:flex; align-items:center; gap:12px; padding:9px 2px; border-bottom:1px solid var(--line-2); }
+  .clitem:last-child{ border-bottom:none; }
+  .clitem .lbl{ flex:1; font-size:13.5px; color:var(--ink-2); min-width:0; }
+  .tri{ display:flex; gap:4px; flex:none; }
+  .tri button{ font-family:inherit; font-size:11.5px; font-weight:600; border:1.5px solid var(--line); background:#fff;
+    color:var(--ink-3); border-radius:8px; padding:5px 10px; cursor:pointer; transition:all .12s; }
+  .tri button.on[data-v=yes]{ background:var(--good-soft); border-color:var(--good); color:#0f6b39; }
+  .tri button.on[data-v=no]{ background:var(--bad-soft); border-color:var(--bad); color:#8f251a; }
+  .tri button.on[data-v=na]{ background:var(--surface-3); border-color:var(--ink-4); color:var(--ink-2); }
+
+  /* ── Pest matrix ── */
+  .pestgroup{ margin-top:18px; }
+  .pestgroup > .gtitle{ font-size:12px; font-weight:700; color:var(--brand); letter-spacing:.02em; margin:0 0 6px; text-transform:uppercase; }
+  .pest{ display:grid; grid-template-columns:1fr auto; gap:10px 12px; align-items:center;
+    padding:12px 0; border-bottom:1px solid var(--line-2); }
+  .pest:last-child{ border-bottom:none; }
+  .pest .pname{ font-size:13.5px; font-weight:600; color:var(--ink); }
+  .pest .plat{ font-size:11px; color:var(--ink-4); font-style:italic; }
+  .pest .pevi{ grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:5px; }
+  .pest .pnotes{ grid-column:1 / -1; }
+  .pest .pnotes input{ font-size:13px; padding:8px 10px; }
+  .evchip{ font-family:inherit; font-size:11px; font-weight:500; color:var(--ink-3);
+    background:var(--surface-2); border:1.5px solid transparent; border-radius:7px; padding:5px 9px; cursor:pointer; }
+  .evchip.on{ background:var(--brand); color:#fff; }
+
+  /* ── Zones ── */
+  .zone{ padding:14px 0; border-bottom:1px solid var(--line-2); }
+  .zone:last-child{ border-bottom:none; }
+  .zone .zh{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .zone .zh .zname{ font-size:14px; font-weight:600; }
+
+  /* ── Photos ── */
+  .uploadbtn{ display:inline-flex; align-items:center; gap:8px; margin-top:14px;
+    background:linear-gradient(135deg,#0033cc,#1d4ed8); color:#fff; border:none; cursor:pointer;
+    font-family:inherit; font-size:14px; font-weight:600; padding:11px 18px; border-radius:999px; }
+  .photogrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; margin-top:16px; }
+  .photo{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface); }
+  .photo .imgwrap{ position:relative; aspect-ratio:4/3; background:var(--surface-3); }
+  .photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo .rm{ position:absolute; top:8px; right:8px; width:26px; height:26px; border-radius:50%;
+    background:rgba(0,0,0,.55); color:#fff; border:none; cursor:pointer; font-size:15px; line-height:1; }
+  .photo .meta{ padding:10px; display:flex; flex-direction:column; gap:7px; }
+  .photo .meta input{ font-size:12.5px; padding:8px 10px; }
+  .photo .capnum{ font-size:11px; font-weight:700; color:var(--brand); }
+
+  /* ── Findings repeater ── */
+  .finding{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; padding:14px 0; border-bottom:1px solid var(--line-2); align-items:start; }
+  .finding:last-child{ border-bottom:none; }
+  .finding .fsev{ display:flex; flex-direction:column; gap:5px; }
+  .finding textarea{ min-height:52px; }
+  .finding .frm{ background:none; border:none; color:var(--bad); cursor:pointer; font-size:12px; font-weight:600; font-family:inherit; padding:0; margin-top:4px; }
+  .addbtn{ margin-top:14px; background:var(--surface-2); color:var(--brand); border:1.5px dashed var(--brand-3);
+    border-radius:var(--r-md); padding:11px; width:100%; cursor:pointer; font-family:inherit; font-weight:600; font-size:13.5px; }
+  .addbtn:hover{ background:#eef2ff; }
+
+  /* ── Regulatory info card ── */
+  .infocard{ background:var(--surface-2); border:1px solid var(--line); border-radius:var(--r-lg); padding:16px 18px; margin-top:16px; }
+  .infocard h3{ font-size:13px; margin:0 0 8px; color:var(--brand); letter-spacing:-.01em; }
+  .infocard ul{ margin:0; padding-left:18px; }
+  .infocard li{ font-size:12.8px; color:var(--ink-2); margin:5px 0; line-height:1.45; }
+
+  /* ── Signatures ── */
+  .signgrid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  @media (max-width:640px){ .signgrid{ grid-template-columns:1fr; } }
+  .signpad{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:#fff; }
+  .signpad canvas{ width:100%; height:150px; display:block; touch-action:none; cursor:crosshair; background:repeating-linear-gradient(0deg,#fff,#fff 28px,#fafafa 28px,#fafafa 29px); }
+  .signpad .sfoot{ display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-top:1px solid var(--line-2); }
+  .signpad .sfoot .sname{ font-size:12px; color:var(--ink-3); }
+  .signpad .sfoot button{ background:none; border:none; color:var(--link); font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; }
+
+  /* ── Sticky action bar ── */
+  .actionbar{ position:fixed; bottom:0; left:0; right:0; z-index:40;
+    background:rgba(255,255,255,.86); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+    border-top:1px solid var(--line); padding:12px 16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .actionbar .status{ position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:11.5px; color:var(--ink-4); }
+  .btn{ font-family:inherit; font-size:14px; font-weight:600; border-radius:999px; padding:11px 20px; cursor:pointer; border:none; transition:all .12s; }
+  .btn.primary{ background:linear-gradient(135deg,#0033cc,#1d4ed8); color:#fff; }
+  .btn.primary:hover{ filter:brightness(1.06); }
+  .btn.ghost{ background:var(--surface-2); color:var(--ink-2); }
+  .btn.ghost:hover{ background:var(--surface-3); }
+
+  .print-only{ display:none; }
+  .print-value{ display:none; white-space:pre-wrap; font-size:13px; color:var(--ink); }
+
+  /* ════════ PRINT ════════ */
+  @media print{
+    @page{ margin:14mm 12mm; }
+    body{ background:#fff; }
+    .wrap{ padding:0; max-width:none; }
+    .no-print{ display:none !important; }
+    .usage,.actionbar,.uploadbtn,.addbtn,.chips button:not(.on),.tri button:not(.on),.evchip:not(.on){ display:none !important; }
+    .chips button.on,.tri button.on,.evchip.on{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    header.masthead{ -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:16px; }
+    .contact input{ border:none; background:none; color:#fff; }
+    section.card{ box-shadow:none; border:1px solid #d5d5da; break-inside:avoid; page-break-inside:avoid; margin-top:12px; }
+    .sec-num{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    input,select,textarea{ background:#fff !important; border:none !important; border-bottom:1px solid #d5d5da !important; border-radius:0 !important; padding:4px 2px !important; }
+    textarea{ display:none; }
+    .print-value{ display:block; border-bottom:1px solid #eee; padding:4px 2px; min-height:18px; }
+    .print-only{ display:block; }
+    .photo{ break-inside:avoid; }
+    .pest,.zone,.finding,.clitem{ break-inside:avoid; }
+    .signpad canvas{ background:#fff; }
+  }
+</style>
+</head>
+<body>
+
+
+<header class="masthead">
+  <div class="brandrow">
+    <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="wordmark">BIO<span class="pest">PEST</span></div>
+  </div>
+  <div class="kicker">USA &middot; Chicago, Illinois</div>
+  <h1>Technical Pest Inspection Report</h1>
+  <div class="sub">Independent evaluation of the current pest management program</div>
+  <div class="contact no-print">
+    <input type="tel"  data-k="co_phone"   placeholder="Phone">
+    <input type="email" data-k="co_email"  placeholder="Email">
+    <input type="text" data-k="co_web"     placeholder="Website">
+    <input type="text" data-k="co_license" placeholder="IL Applicator License #">
+  </div>
+  <div class="print-only" id="contactPrint" style="margin-top:12px;font-size:12px;color:rgba(255,255,255,.85)"></div>
+</header>
+
+<div class="usage no-print">
+  <span>👉</span>
+  <span><b>How to use:</b> Fill this out on-site (works on phone, tablet or laptop). Your answers and photos auto-save in this browser. When you're done, press <b>“Save as PDF”</b> to generate the clean report to send the client. Share this link with the team to reuse the format for any inspection.</span>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. Inspection details -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">1</span><h2>Inspection Details</h2></div>
+    <div class="grid g2">
+      <div class="field"><label>Client / Business name</label><input type="text" data-k="d_client" placeholder="e.g. Sunrise Artisan Bakery"></div>
+      <div class="field"><label>Facility type</label><input type="text" data-k="d_ftype" value="Bakery / Commercial food production"></div>
+      <div class="field" style="grid-column:1/-1"><label>Site address</label><input type="text" data-k="d_addr" placeholder="Street, Chicago, IL, ZIP"></div>
+      <div class="field"><label>Inspection date</label><input type="date" data-k="d_date"></div>
+      <div class="field"><label>Contact on site</label><input type="text" data-k="d_contact" placeholder="Name / role"></div>
+      <div class="field"><label>Time in</label><input type="time" data-k="d_in"></div>
+      <div class="field"><label>Time out</label><input type="time" data-k="d_out"></div>
+      <div class="field"><label>Inspector (BioPest USA)</label><input type="text" data-k="d_inspector" placeholder="Technician name"></div>
+      <div class="field"><label>Inspector license #</label><input type="text" data-k="d_inslic" placeholder="IL structural pest control lic."></div>
+      <div class="field" style="grid-column:1/-1"><label>Scope of visit</label><input type="text" data-k="d_scope" value="Third-party technical audit of existing pest control service and current site conditions"></div>
+    </div>
+  </section>
+
+  <!-- 2. Current provider audit -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Current Provider &amp; Program Audit</h2></div>
+    <p class="hint">What the incumbent provider has in place and whether it is documented and compliant.</p>
+    <div class="grid g2">
+      <div class="field"><label>Current pest control provider</label><input type="text" data-k="p_provider" placeholder="Company name (if known)"></div>
+      <div class="field"><label>Contracted service frequency</label><input type="text" data-k="p_freq" placeholder="e.g. Monthly / Bi-weekly"></div>
+      <div class="field"><label>Last documented service date</label><input type="date" data-k="p_last"></div>
+      <div class="field"><label>Service type</label><input type="text" data-k="p_type" placeholder="e.g. General pest + rodent"></div>
+    </div>
+    <p class="eyebrow" style="margin-top:18px">Documentation present on site</p>
+    <div class="checklist" id="cl_docs"></div>
+    <div class="field" style="margin-top:14px"><label>Program observations</label><textarea data-k="p_obs" placeholder="Service log gaps, expired product, unmapped devices, missed areas, generic (non-IPM) approach, over-reliance on spraying, etc."></textarea></div>
+  </section>
+
+  <!-- 3. Pest activity -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Pest Activity Assessment</h2></div>
+    <p class="hint">Target pests for a Chicago bakery. Mark presence, severity and the evidence observed.</p>
+    <div id="pests"></div>
+  </section>
+
+  <!-- 4. Monitoring devices -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Monitoring &amp; Device Audit</h2></div>
+    <p class="hint">Condition and servicing of the existing monitoring program.</p>
+
+    <div class="grid g3" style="margin-top:6px">
+      <div class="field"><label>Exterior rodent bait stations — count</label><input type="number" data-k="m_ext_ct" min="0" placeholder="#"></div>
+      <div class="field"><label>Interior rodent devices — count</label><input type="number" data-k="m_int_ct" min="0" placeholder="#"></div>
+      <div class="field"><label>Insect light traps (ILTs) — count</label><input type="number" data-k="m_ilt_ct" min="0" placeholder="#"></div>
+    </div>
+
+    <p class="eyebrow" style="margin-top:18px">Device program condition</p>
+    <div class="checklist" id="cl_devices"></div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="field"><label>ILT last bulb change (if labeled)</label><input type="text" data-k="m_bulb" placeholder="Date on unit / unknown"></div>
+      <div class="field"><label>Pheromone / stored-product monitors</label><input type="text" data-k="m_pher" placeholder="Present? count / catch"></div>
+    </div>
+    <div class="field" style="margin-top:14px"><label>Device notes</label><textarea data-k="m_notes" placeholder="Missing/blocked stations, unsecured stations, no floor plan, traps behind equipment inaccessible, catches not recorded, etc."></textarea></div>
+  </section>
+
+  <!-- 5. Facility zones -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Facility Zone Inspection</h2></div>
+    <p class="hint">Walk-through by area, front of dock to roof.</p>
+    <div id="zones"></div>
+  </section>
+
+  <!-- 6. Conducive conditions -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Conducive Conditions</h2></div>
+    <p class="hint">Sanitation, exclusion, storage and moisture — the drivers of pest pressure in a bakery.</p>
+
+    <p class="eyebrow" style="margin-top:12px">Exclusion &amp; structure</p>
+    <div class="checklist" id="cl_excl"></div>
+    <p class="eyebrow" style="margin-top:18px">Sanitation</p>
+    <div class="checklist" id="cl_san"></div>
+    <p class="eyebrow" style="margin-top:18px">Storage &amp; ingredient handling</p>
+    <div class="checklist" id="cl_stor"></div>
+    <div class="field" style="margin-top:16px"><label>Conducive-conditions notes</label><textarea data-k="cc_notes" placeholder="Flour dust accumulation under mixers, standing water at drains, gaps at dock seals, missing door sweeps, product stored on floor, etc."></textarea></div>
+  </section>
+
+  <!-- 7. Ratings -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Overall Ratings</h2></div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="field"><label>Structural / exclusion</label><div class="chips" data-group="r_struct" data-tone-map="good,warn,bad">
+        <button data-tone="good" data-v="Good">Good</button><button data-tone="warn" data-v="Fair">Fair</button><button data-tone="bad" data-v="Poor">Poor</button></div></div>
+      <div class="field"><label>Sanitation</label><div class="chips" data-group="r_san">
+        <button data-tone="good" data-v="Good">Good</button><button data-tone="warn" data-v="Fair">Fair</button><button data-tone="bad" data-v="Poor">Poor</button></div></div>
+      <div class="field"><label>Current provider program effectiveness</label><div class="chips" data-group="r_prog">
+        <button data-tone="good" data-v="Effective">Effective</button><button data-tone="warn" data-v="Marginal">Marginal</button><button data-tone="bad" data-v="Deficient">Deficient</button></div></div>
+      <div class="field"><label>Overall pest risk level</label><div class="chips" data-group="r_risk">
+        <button data-tone="good" data-v="Low">Low</button><button data-tone="warn" data-v="Moderate">Moderate</button><button data-tone="bad" data-v="High">High</button><button data-tone="crit" data-v="Critical">Critical</button></div></div>
+    </div>
+    <div class="field" style="margin-top:16px"><label>Executive summary</label><textarea data-k="sum" placeholder="2–4 sentence summary of what was found and the bottom line for the client." style="min-height:96px"></textarea></div>
+  </section>
+
+  <!-- 8. Photos -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Photo Evidence</h2></div>
+    <p class="hint">Add photos of findings. Each one carries a caption and location onto the report.</p>
+    <button class="uploadbtn no-print" id="addPhoto" type="button">📷 Add photos</button>
+    <input type="file" id="photoInput" accept="image/*" multiple capture="environment" style="display:none">
+    <div class="photogrid" id="photogrid"></div>
+  </section>
+
+  <!-- 9. Findings & recommendations -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Findings &amp; Recommendations</h2></div>
+    <p class="hint">Prioritized corrective actions. Add one row per finding.</p>
+    <div id="findings"></div>
+    <button class="addbtn no-print" id="addFinding" type="button">+ Add finding</button>
+    <div class="field" style="margin-top:18px"><label>BioPest USA proposed program</label><textarea data-k="proposal" placeholder="Recommended IPM approach, service frequency, exclusion/sanitation work, monitoring plan, documentation and audit-readiness, and next steps." style="min-height:110px"></textarea></div>
+  </section>
+
+  <!-- 10. Compliance note -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Standards &amp; Compliance Context</h2></div>
+    <div class="infocard">
+      <h3>Why this matters for a food-production facility in Illinois</h3>
+      <ul>
+        <li><b>Illinois Structural Pest Control Act (IDPH):</b> commercial applications must be performed by licensed/certified technicians with proper records and service documentation.</li>
+        <li><b>FDA Food Code &amp; FSMA preventive controls:</b> an active pest management program with monitoring and corrective actions is expected; pest activity in production areas is a critical violation.</li>
+        <li><b>Third-party audit readiness (SQF / BRCGS / AIB):</b> require a device map, trend analysis, service logs, corrective-action tracking and an IPM plan — commonly the biggest gaps we find.</li>
+        <li><b>EPA label &amp; recordkeeping:</b> products must be labeled, stored correctly, applied per label, with SDS and application records on site.</li>
+      </ul>
+    </div>
+    <div class="field" style="margin-top:16px"><label>Compliance / documentation gaps observed</label><textarea data-k="comp_notes" placeholder="Reference any items above that are missing or deficient."></textarea></div>
+  </section>
+
+  <!-- 11. Sign-off -->
+  <section class="card">
+    <div class="sec-head"><span class="sec-num">11</span><h2>Sign-off</h2></div>
+    <div class="signgrid">
+      <div>
+        <div class="signpad">
+          <canvas data-sig="insp"></canvas>
+          <div class="sfoot"><span class="sname">Inspector — BioPest USA</span><button type="button" class="no-print" data-clear="insp">Clear</button></div>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_insp_name" placeholder="Inspector name — date"></div>
+      </div>
+      <div>
+        <div class="signpad">
+          <canvas data-sig="client"></canvas>
+          <div class="sfoot"><span class="sname">Client acknowledgment</span><button type="button" class="no-print" data-clear="client">Clear</button></div>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_client_name" placeholder="Client rep name — date"></div>
+      </div>
+    </div>
+    <p class="hint" style="margin-left:0;margin-top:14px">This report reflects conditions observed at the time of inspection and is provided by BioPest USA as an independent technical evaluation.</p>
+  </section>
+
+</div>
+
+<div class="actionbar no-print">
+  <span class="status" id="status">Auto-saving…</span>
+  <button class="btn primary" id="btnPrint" type="button">⬇ Save as PDF</button>
+  <button class="btn ghost" id="btnClear" type="button">Clear form</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var LS = "biopest_usa_inspection_v1";
+  var state = { fields:{}, groups:{}, tris:{}, evi:{}, photos:[], findings:[], sigs:{} };
+
+  /* ---------- data definitions ---------- */
+  var DOCS = [
+    "Service logbook / visit records on site",
+    "Pesticide application records",
+    "Product labels available",
+    "Safety Data Sheets (SDS)",
+    "IL applicator license posted / on file",
+    "Written IPM / scope of service plan",
+    "Device floor plan / station map",
+    "Trend report or activity history"
+  ];
+  var DEVICES = [
+    "Exterior stations secured &amp; anchored",
+    "Stations tamper-resistant &amp; locked",
+    "Stations labeled / dated / numbered",
+    "Bait fresh (not spoiled / depleted)",
+    "Interior traps accessible &amp; serviced",
+    "ILTs placed away from food &amp; exits",
+    "ILT catch trays clean / recently serviced",
+    "Devices match the station map"
+  ];
+  var EXCL = [
+    "Door sweeps present &amp; sealing",
+    "Dock levelers / seals intact",
+    "Exterior gaps &amp; utility penetrations sealed",
+    "Screens / vents intact",
+    "Self-closing exterior doors",
+    "No gaps at overhead / receiving doors"
+  ];
+  var SAN = [
+    "Floors &amp; drains clean (no organic buildup)",
+    "No flour / ingredient dust accumulation",
+    "Equipment cleaned under &amp; behind",
+    "No standing water",
+    "Waste managed / dumpsters closed &amp; clean",
+    "No food debris in break room / lockers"
+  ];
+  var STOR = [
+    "Product stored off the floor (pallets/shelving)",
+    "18\" clearance around walls",
+    "FIFO rotation practiced",
+    "Bulk ingredients in sealed containers",
+    "No damaged / infested packaging",
+    "Dry storage dry &amp; ventilated"
+  ];
+  var PESTS = [
+    ["Rodents", [
+      ["House mouse","Mus musculus"],
+      ["Norway rat","Rattus norvegicus"]
+    ]],
+    ["Stored product pests", [
+      ["Indianmeal moth","Plodia interpunctella"],
+      ["Sawtoothed grain beetle","Oryzaephilus surinamensis"],
+      ["Red / confused flour beetle","Tribolium spp."],
+      ["Grain / rice weevils","Sitophilus spp."],
+      ["Grain / mold mites","Acarus / Tyrophagus"]
+    ]],
+    ["Crawling insects", [
+      ["German cockroach","Blattella germanica"],
+      ["Ants (odorous / pavement)","Tapinoma / Tetramorium"]
+    ]],
+    ["Flying insects", [
+      ["Fruit flies","Drosophila spp."],
+      ["Drain / phorid flies","Psychodidae / Phoridae"],
+      ["House / filth flies","Musca / Fannia"]
+    ]],
+    ["Exterior / occasional", [
+      ["Birds (pigeon / sparrow)","Columba / Passer"]
+    ]]
+  ];
+  var EVIDENCE = ["Live specimens","Droppings","Gnaw / damage","Webbing / frass","Product infested","Reported sightings"];
+  var ZONES = [
+    "Exterior perimeter &amp; foundation",
+    "Receiving / dock",
+    "Dry &amp; ingredient storage (flour room)",
+    "Mixing &amp; prep",
+    "Baking / oven area",
+    "Proofing",
+    "Cooling &amp; packaging",
+    "Finished-goods storage",
+    "Waste / dumpster area",
+    "Employee break room &amp; lockers",
+    "Restrooms",
+    "Roof / roof access &amp; utilities"
+  ];
+
+  /* ---------- helpers ---------- */
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+  function save(){
+    try{
+      localStorage.setItem(LS, JSON.stringify(state));
+      var s=document.getElementById("status"); if(s){ s.textContent="Saved ✓"; clearTimeout(save._t); save._t=setTimeout(function(){ s.textContent="Auto-saving…"; },1200); }
+    }catch(e){ var s2=document.getElementById("status"); if(s2) s2.textContent="Saved (photos may exceed storage)"; }
+  }
+  function load(){ try{ var raw=localStorage.getItem(LS); if(raw){ var p=JSON.parse(raw); Object.assign(state, p); } }catch(e){} }
+
+  /* ---------- bound fields (data-k) ---------- */
+  function bindFields(){
+    document.querySelectorAll("[data-k]").forEach(function(inp){
+      var k=inp.getAttribute("data-k");
+      if(state.fields[k]!=null) inp.value=state.fields[k];
+      inp.addEventListener("input", function(){ state.fields[k]=inp.value; save(); });
+    });
+  }
+
+  /* ---------- chip groups ---------- */
+  function bindGroups(){
+    document.querySelectorAll(".chips[data-group]").forEach(function(g){
+      var name=g.getAttribute("data-group");
+      g.querySelectorAll("button").forEach(function(b){
+        var v=b.getAttribute("data-v");
+        if(state.groups[name]===v) b.classList.add("on");
+        b.addEventListener("click", function(){
+          var cur=state.groups[name]===v;
+          g.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+          if(cur){ delete state.groups[name]; } else { b.classList.add("on"); state.groups[name]=v; }
+          save();
+        });
+      });
+    });
+  }
+
+  /* ---------- checklists (tri-state) ---------- */
+  function buildChecklist(containerId, items, key){
+    var c=document.getElementById(containerId); if(!c) return;
+    state.tris[key]=state.tris[key]||{};
+    items.forEach(function(label, i){
+      var row=el("div","clitem");
+      var lbl=el("div","lbl"); lbl.innerHTML=label; row.appendChild(lbl);
+      var tri=el("div","tri");
+      [["yes","Yes"],["no","No"],["na","N/A"]].forEach(function(pair){
+        var b=el("button",null,pair[1]); b.setAttribute("data-v",pair[0]);
+        if(state.tris[key][i]===pair[0]) b.classList.add("on");
+        b.addEventListener("click", function(){
+          var cur=state.tris[key][i]===pair[0];
+          tri.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+          if(cur){ delete state.tris[key][i]; } else { b.classList.add("on"); state.tris[key][i]=pair[0]; }
+          save();
+        });
+        tri.appendChild(b);
+      });
+      row.appendChild(tri); c.appendChild(row);
+    });
+  }
+
+  /* ---------- pests ---------- */
+  function buildPests(){
+    var host=document.getElementById("pests"); if(!host) return;
+    state.evi=state.evi||{};
+    var idx=0;
+    PESTS.forEach(function(grp){
+      var gwrap=el("div","pestgroup");
+      gwrap.appendChild(el("div","gtitle",grp[0]));
+      grp[1].forEach(function(p){
+        var i=idx++; var key="pest_"+i;
+        state.evi[key]=state.evi[key]||{sev:null,ev:{},notes:""};
+        var row=el("div","pest");
+        var name=el("div"); name.innerHTML='<span class="pname">'+p[0]+'</span> &nbsp;<span class="plat">'+p[1]+'</span>';
+        row.appendChild(name);
+        // severity chips
+        var sev=el("div","chips");
+        [["None","good"],["Low","warn"],["Moderate","warn"],["High","bad"]].forEach(function(s){
+          var b=el("button",null,s[0]); b.setAttribute("data-tone",s[1]==="warn"&&s[0]==="Moderate"?"warn":s[1]);
+          if(state.evi[key].sev===s[0]) b.classList.add("on");
+          b.addEventListener("click", function(){
+            var cur=state.evi[key].sev===s[0];
+            sev.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+            if(cur){ state.evi[key].sev=null; } else { b.classList.add("on"); state.evi[key].sev=s[0]; }
+            save();
+          });
+          sev.appendChild(b);
+        });
+        row.appendChild(sev);
+        // evidence chips
+        var evi=el("div","pevi");
+        EVIDENCE.forEach(function(ev){
+          var b=el("button","evchip",ev);
+          if(state.evi[key].ev[ev]) b.classList.add("on");
+          b.addEventListener("click", function(){
+            if(state.evi[key].ev[ev]){ delete state.evi[key].ev[ev]; b.classList.remove("on"); }
+            else { state.evi[key].ev[ev]=true; b.classList.add("on"); }
+            save();
+          });
+          evi.appendChild(b);
+        });
+        row.appendChild(evi);
+        // notes
+        var nwrap=el("div","pnotes");
+        var ni=el("input"); ni.type="text"; ni.placeholder="Location / notes"; ni.value=state.evi[key].notes||"";
+        ni.addEventListener("input", function(){ state.evi[key].notes=ni.value; save(); });
+        nwrap.appendChild(ni); row.appendChild(nwrap);
+        gwrap.appendChild(row);
+      });
+      host.appendChild(gwrap);
+    });
+  }
+
+  /* ---------- zones ---------- */
+  function buildZones(){
+    var host=document.getElementById("zones"); if(!host) return;
+    state.tris.zones=state.tris.zones||{};
+    ZONES.forEach(function(z,i){
+      var key="zone_"+i;
+      state.fields[key]=state.fields[key]; // keep
+      var wrap=el("div","zone");
+      var zh=el("div","zh");
+      zh.innerHTML='<span class="zname">'+z+'</span>';
+      // rating chips per zone
+      var chips=el("div","chips"); chips.style.marginLeft="auto";
+      [["OK","good"],["Watch","warn"],["Issue","bad"]].forEach(function(s){
+        var b=el("button",null,s[0]); b.setAttribute("data-tone",s[1]);
+        if(state.tris.zones[i]===s[0]) b.classList.add("on");
+        b.addEventListener("click", function(){
+          var cur=state.tris.zones[i]===s[0];
+          chips.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+          if(cur){ delete state.tris.zones[i]; } else { b.classList.add("on"); state.tris.zones[i]=s[0]; }
+          save();
+        });
+        chips.appendChild(b);
+      });
+      zh.appendChild(chips); wrap.appendChild(zh);
+      var ta=el("textarea"); ta.setAttribute("data-k",key); ta.placeholder="Findings in this area…";
+      if(state.fields[key]!=null) ta.value=state.fields[key];
+      ta.addEventListener("input", function(){ state.fields[key]=ta.value; save(); });
+      wrap.appendChild(ta);
+      host.appendChild(wrap);
+    });
+  }
+
+  /* ---------- photos ---------- */
+  function renderPhotos(){
+    var grid=document.getElementById("photogrid"); if(!grid) return;
+    grid.innerHTML="";
+    state.photos.forEach(function(ph,i){
+      var card=el("div","photo");
+      var iw=el("div","imgwrap");
+      var img=el("img"); img.src=ph.data; img.alt="Evidence photo "+(i+1); iw.appendChild(img);
+      var rm=el("button","rm no-print","✕"); rm.title="Remove";
+      rm.addEventListener("click", function(){ state.photos.splice(i,1); renderPhotos(); save(); });
+      iw.appendChild(rm); card.appendChild(iw);
+      var meta=el("div","meta");
+      meta.appendChild(el("div","capnum","Photo "+(i+1)));
+      var cap=el("input"); cap.type="text"; cap.placeholder="Caption / finding"; cap.value=ph.cap||"";
+      cap.addEventListener("input", function(){ ph.cap=cap.value; save(); });
+      var loc=el("input"); loc.type="text"; loc.placeholder="Location / area"; loc.value=ph.loc||"";
+      loc.addEventListener("input", function(){ ph.loc=loc.value; save(); });
+      meta.appendChild(cap); meta.appendChild(loc); card.appendChild(meta);
+      grid.appendChild(card);
+    });
+  }
+  function compress(file, cb){
+    var reader=new FileReader();
+    reader.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var max=1280, w=img.width, h=img.height;
+        if(w>max){ h=Math.round(h*max/w); w=max; }
+        var cv=document.createElement("canvas"); cv.width=w; cv.height=h;
+        cv.getContext("2d").drawImage(img,0,0,w,h);
+        cb(cv.toDataURL("image/jpeg",0.72));
+      };
+      img.onerror=function(){ cb(reader.result); };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  function bindPhotos(){
+    var btn=document.getElementById("addPhoto"), inp=document.getElementById("photoInput");
+    if(!btn||!inp) return;
+    btn.addEventListener("click", function(){ inp.click(); });
+    inp.addEventListener("change", function(){
+      var files=Array.prototype.slice.call(inp.files||[]);
+      var pending=files.length;
+      files.forEach(function(f){
+        compress(f, function(data){ state.photos.push({data:data,cap:"",loc:""}); pending--; if(pending<=0){ renderPhotos(); save(); } });
+      });
+      inp.value="";
+    });
+  }
+
+  /* ---------- findings ---------- */
+  function renderFindings(){
+    var host=document.getElementById("findings"); if(!host) return;
+    host.innerHTML="";
+    state.findings.forEach(function(f,i){
+      var row=el("div","finding");
+      var sev=el("div","fsev");
+      sev.appendChild(el("div","eyebrow","Priority"));
+      var chips=el("div","chips");
+      [["High","bad"],["Medium","warn"],["Low","good"]].forEach(function(s){
+        var b=el("button",null,s[0]); b.setAttribute("data-tone",s[1]);
+        if(f.sev===s[0]) b.classList.add("on");
+        b.addEventListener("click", function(){
+          f.sev = (f.sev===s[0])?null:s[0];
+          chips.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+          if(f.sev) b.classList.add("on"); save();
+        });
+        chips.appendChild(b);
+      });
+      sev.appendChild(chips);
+      var rmv=el("button","frm no-print","Remove"); rmv.addEventListener("click", function(){ state.findings.splice(i,1); renderFindings(); save(); });
+      sev.appendChild(rmv);
+      row.appendChild(sev);
+      var body=el("div");
+      var t1=el("textarea"); t1.placeholder="Finding / observation"; t1.value=f.text||"";
+      t1.addEventListener("input", function(){ f.text=t1.value; save(); });
+      var t2=el("textarea"); t2.placeholder="Recommended corrective action"; t2.value=f.action||""; t2.style.marginTop="8px";
+      t2.addEventListener("input", function(){ f.action=t2.value; save(); });
+      body.appendChild(t1); body.appendChild(t2);
+      row.appendChild(body);
+      host.appendChild(row);
+    });
+  }
+  function bindFindings(){
+    var add=document.getElementById("addFinding");
+    if(add) add.addEventListener("click", function(){ state.findings.push({sev:null,text:"",action:""}); renderFindings(); save(); });
+  }
+
+  /* ---------- signatures ---------- */
+  function initSig(canvas){
+    var key=canvas.getAttribute("data-sig");
+    var ctx=canvas.getContext("2d");
+    function size(){
+      var r=canvas.getBoundingClientRect(), dpr=window.devicePixelRatio||1;
+      var data=state.sigs[key];
+      canvas.width=r.width*dpr; canvas.height=r.height*dpr; ctx.scale(dpr,dpr);
+      ctx.lineWidth=2; ctx.lineCap="round"; ctx.lineJoin="round"; ctx.strokeStyle="#1d1d1f";
+      if(data){ var img=new Image(); img.onload=function(){ ctx.drawImage(img,0,0,r.width,r.height); }; img.src=data; }
+    }
+    setTimeout(size,0);
+    var drawing=false, last=null;
+    function pos(e){ var r=canvas.getBoundingClientRect(); var t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left, y:t.clientY-r.top}; }
+    function start(e){ drawing=true; last=pos(e); e.preventDefault(); }
+    function move(e){ if(!drawing) return; var p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; e.preventDefault(); }
+    function end(){ if(!drawing) return; drawing=false; try{ state.sigs[key]=canvas.toDataURL("image/png"); save(); }catch(e){} }
+    canvas.addEventListener("pointerdown",start); canvas.addEventListener("pointermove",move);
+    window.addEventListener("pointerup",end);
+    var clr=document.querySelector('[data-clear="'+key+'"]');
+    if(clr) clr.addEventListener("click", function(){ ctx.clearRect(0,0,canvas.width,canvas.height); delete state.sigs[key]; save(); });
+  }
+  function bindSigs(){ document.querySelectorAll("canvas[data-sig]").forEach(initSig); }
+
+  /* ---------- print sync (textarea -> visible value) ---------- */
+  function syncForPrint(){
+    document.querySelectorAll(".print-value[data-for]").forEach(function(n){ n.remove(); });
+    document.querySelectorAll("textarea[data-k], textarea").forEach(function(ta){
+      var pv=el("div","print-value"); pv.setAttribute("data-for","1"); pv.textContent=ta.value||"—";
+      ta.parentNode.insertBefore(pv, ta.nextSibling);
+    });
+    // contact header for print
+    var c=document.getElementById("contactPrint");
+    if(c){
+      var f=state.fields;
+      var parts=[f.co_phone,f.co_email,f.co_web,(f.co_license?("Lic. "+f.co_license):"")].filter(function(x){return x;});
+      c.textContent=parts.join("   ·   ");
+    }
+  }
+  window.addEventListener("beforeprint", syncForPrint);
+
+  /* ---------- actions ---------- */
+  function bindActions(){
+    var p=document.getElementById("btnPrint");
+    if(p) p.addEventListener("click", function(){ syncForPrint(); window.print(); });
+    var c=document.getElementById("btnClear");
+    if(c) c.addEventListener("click", function(){
+      if(confirm("Clear the entire form and start a new inspection? This cannot be undone.")){
+        localStorage.removeItem(LS); location.reload();
+      }
+    });
+  }
+
+  /* ---------- boot ---------- */
+  load();
+  bindFields();
+  bindGroups();
+  buildChecklist("cl_docs", DOCS, "docs");
+  buildChecklist("cl_devices", DEVICES, "devices");
+  buildChecklist("cl_excl", EXCL, "excl");
+  buildChecklist("cl_san", SAN, "san");
+  buildChecklist("cl_stor", STOR, "stor");
+  buildPests();
+  buildZones();
+  renderPhotos();
+  bindPhotos();
+  renderFindings();
+  bindFindings();
+  bindActions();
+  bindSigs();
+  // default date to today if empty
+  var dd=document.querySelector('[data-k="d_date"]');
+  if(dd && !dd.value){ try{ dd.value=new Date().toISOString().slice(0,10); state.fields.d_date=dd.value; }catch(e){} }
+})();
+</script>
+
+</body>
+</html>
