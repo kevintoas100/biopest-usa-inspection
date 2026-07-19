@@ -150,6 +150,8 @@
   .lights button.on[data-l=green]{ background:var(--good-soft); border-color:var(--good); color:#0f6b39; }
   .lights button.on[data-l=yellow]{ background:var(--warn-soft); border-color:var(--warn); color:#7a5900; }
   .lights button.on[data-l=red]{ background:var(--bad-soft); border-color:var(--bad); color:#8f251a; }
+  .otherpest{ display:flex; flex-direction:column; gap:10px; align-items:flex-start; padding:12px 0; border-top:1px solid var(--line-2); }
+  .otherpest input{ width:100%; }
 
   /* ── Mini photo adder (per finding / per zone) ── */
   .miniphoto{ margin-top:12px; }
@@ -434,7 +436,7 @@
 (function(){
   "use strict";
   var LS = "biopest_usa_inspection_v1";
-  var state = { fields:{}, groups:{}, tris:{}, pest:{}, photos:[], zonePhotos:{}, findings:[], sigs:{} };
+  var state = { fields:{}, groups:{}, tris:{}, pest:{}, otherPests:[], photos:[], zonePhotos:{}, findings:[], sigs:{} };
 
   /* ---------- data definitions ---------- */
   var DOCS = [
@@ -621,6 +623,46 @@
       });
       host.appendChild(gwrap);
     });
+
+    // ── "Other" — free-form additional pests not in the list above ──
+    state.otherPests=state.otherPests||[];
+    var ogroup=el("div","pestgroup");
+    ogroup.appendChild(el("div","gtitle","Other"));
+    var olist=el("div");
+    function renderOther(){
+      olist.innerHTML="";
+      state.otherPests.forEach(function(op,oi){
+        var row=el("div","otherpest");
+        var nm=el("input"); nm.type="text"; nm.placeholder="Pest name — specify"; nm.value=op.name||""; nm.style.fontWeight="600";
+        nm.addEventListener("input", function(){ op.name=nm.value; save(); });
+        row.appendChild(nm);
+        var lights=el("div","lights");
+        [["green","None"],["yellow","Watch"],["red","Active"]].forEach(function(s){
+          var b=el("button",null,'<span class="dot"></span>'+s[1]); b.setAttribute("data-l",s[0]);
+          if(op.light===s[0]) b.classList.add("on");
+          b.addEventListener("click", function(){
+            var cur=op.light===s[0];
+            lights.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+            if(cur){ op.light=null; } else { b.classList.add("on"); op.light=s[0]; }
+            save();
+          });
+          lights.appendChild(b);
+        });
+        row.appendChild(lights);
+        var nt=el("input"); nt.type="text"; nt.placeholder="Location / notes (optional)"; nt.value=op.notes||"";
+        nt.addEventListener("input", function(){ op.notes=nt.value; save(); });
+        row.appendChild(nt);
+        var rm=el("button","frm no-print","Remove"); rm.addEventListener("click", function(){ state.otherPests.splice(oi,1); renderOther(); save(); });
+        row.appendChild(rm);
+        olist.appendChild(row);
+      });
+    }
+    ogroup.appendChild(olist);
+    var addO=el("button","addbtn no-print","+ Add other pest"); addO.type="button";
+    addO.addEventListener("click", function(){ state.otherPests.push({name:"",light:null,notes:""}); renderOther(); save(); });
+    ogroup.appendChild(addO);
+    renderOther();
+    host.appendChild(ogroup);
   }
 
   /* ---------- zones ---------- */
