@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0033cc">
+<title>BioPest USA — Field Guide: How to Complete the Inspection Report</title>
+<style>
+  :root{
+    --brand:#0033cc; --brand-2:#1d4ed8; --brand-3:#2563eb; --link:#0071e3;
+    --bg:#fbfbfd; --surface:#ffffff; --surface-2:#f5f5f7; --surface-3:#ebebef;
+    --ink:#1d1d1f; --ink-2:#424245; --ink-3:#6e6e73; --ink-4:#86868b;
+    --line:rgba(0,0,0,.10); --line-2:rgba(0,0,0,.05);
+    --good:#1f9d55; --good-soft:#e6f4ec; --warn:#b8860b; --warn-soft:#fdf3d6;
+    --bad:#c0392b; --bad-soft:#fce8e6;
+    --r-md:12px; --r-lg:18px; --r-xl:22px; color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; letter-spacing:-.011em; line-height:1.6; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 18px 80px; }
+
+  header.masthead{ background:radial-gradient(120% 90% at 50% 0%, #1d4ed8 0%, #0033cc 46%, #001a66 100%);
+    color:#fff; padding:28px 18px 24px; text-align:center; }
+  .brandrow{ display:flex; align-items:center; justify-content:center; gap:11px; }
+  .dots{ display:flex; flex-direction:column; gap:5px; }
+  .dots span{ width:10px; height:10px; border-radius:50%; background:#fff; display:block; }
+  .wordmark{ font-size:30px; font-weight:800; letter-spacing:-.03em; line-height:1; display:flex; align-items:center; }
+  .wordmark .pest{ background:#fff; color:#0033cc; padding:3px 8px; margin-left:6px; border-radius:7px; }
+  .masthead .kicker{ margin-top:12px; font-size:11px; letter-spacing:.3em; font-weight:600; color:rgba(255,255,255,.62); text-transform:uppercase; }
+  .masthead h1{ margin:8px 0 0; font-size:21px; font-weight:600; letter-spacing:-.02em; }
+  .masthead .sub{ margin-top:4px; font-size:13px; color:rgba(255,255,255,.78); }
+
+  .lead{ font-size:15.5px; color:var(--ink-2); margin:22px 0 0; }
+
+  /* TOC */
+  .toc{ display:flex; flex-wrap:wrap; gap:7px; margin:18px 0 6px; }
+  .toc a{ font-size:12.5px; font-weight:600; text-decoration:none; color:var(--brand);
+    background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:6px 12px; }
+  .toc a:hover{ background:#eef2ff; }
+
+  h2.sec{ display:flex; align-items:center; gap:11px; font-size:19px; font-weight:600; letter-spacing:-.02em;
+    margin:34px 0 6px; scroll-margin-top:14px; }
+  .sn{ flex:none; width:27px; height:27px; border-radius:8px; background:var(--brand); color:#fff;
+    font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  h3{ font-size:15px; font-weight:600; margin:20px 0 4px; letter-spacing:-.01em; }
+  p{ margin:8px 0; }
+  ul{ margin:8px 0; padding-left:20px; }
+  li{ margin:5px 0; }
+  b{ font-weight:600; }
+  .muted{ color:var(--ink-3); font-size:13.5px; }
+
+  .rule{ height:1px; background:var(--line); border:none; margin:26px 0 0; }
+
+  /* Callouts */
+  .box{ border-radius:var(--r-lg); padding:14px 16px; margin:14px 0; font-size:14px; border:1px solid var(--line); }
+  .box .h{ font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px; display:flex; align-items:center; gap:7px; }
+  .tip{ background:#eef4ff; border-color:#c7d7fe; }
+  .tip .h{ color:var(--brand); }
+  .good{ background:var(--good-soft); border-color:#a7e0c0; }
+  .good .h{ color:#0f6b39; }
+  .flag{ background:var(--bad-soft); border-color:#f3b4ac; }
+  .flag .h{ color:#8f251a; }
+
+  /* Steps */
+  .steps{ counter-reset:s; list-style:none; padding:0; margin:12px 0; }
+  .steps li{ counter-increment:s; position:relative; padding:6px 0 6px 40px; }
+  .steps li::before{ content:counter(s); position:absolute; left:0; top:4px; width:26px; height:26px;
+    background:var(--brand); color:#fff; border-radius:50%; font-size:13px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; }
+
+  /* Chips legend */
+  .legend{ display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+  .chip{ font-size:12px; font-weight:600; border-radius:999px; padding:5px 11px; color:#fff; }
+  .c-good{ background:var(--good); } .c-warn{ background:var(--warn); } .c-bad{ background:var(--bad); } .c-crit{ background:#7f1d1d; } .c-brand{ background:var(--brand); }
+
+  /* Cheat-sheet table */
+  .tablewrap{ overflow-x:auto; margin:14px 0; border:1px solid var(--line); border-radius:var(--r-lg); }
+  table{ border-collapse:collapse; width:100%; min-width:560px; font-size:13.5px; }
+  th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line-2); vertical-align:top; }
+  th{ background:var(--surface-2); font-weight:600; color:var(--ink-2); font-size:12px; text-transform:uppercase; letter-spacing:.03em; }
+  tr:last-child td{ border-bottom:none; }
+  td b{ color:var(--ink); }
+  td i{ color:var(--ink-4); font-size:12px; }
+
+  .backbtn{ display:inline-flex; align-items:center; gap:8px; margin:8px 0 0;
+    background:linear-gradient(135deg,#0033cc,#1d4ed8); color:#fff; text-decoration:none;
+    font-size:14px; font-weight:600; padding:11px 18px; border-radius:999px; }
+
+  .footer{ margin-top:40px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-4); }
+
+  @media print{
+    @page{ margin:14mm 12mm; }
+    body{ background:#fff; }
+    .toc,.backbtn{ display:none; }
+    header.masthead{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .box,.tablewrap,table,tr,li,h2.sec{ break-inside:avoid; }
+    .sn,.chip,.steps li::before{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="brandrow">
+    <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="wordmark">BIO<span class="pest">PEST</span></div>
+  </div>
+  <div class="kicker">USA &middot; Field Guide</div>
+  <h1>How to Complete the Inspection Report</h1>
+  <div class="sub">A step-by-step guide for the technician on site</div>
+</header>
+
+<div class="wrap">
+
+  <p class="lead">This guide walks you through the BioPest USA inspection report field by field. The goal of this visit is a <b>fair, fact-based technical evaluation</b> of the client's <b>current</b> pest control program at their bakery — what's working, what isn't, and what we would do better. Fill it in on your phone as you walk the site; it takes about 30&ndash;45 minutes.</p>
+
+  <a class="backbtn" href="./">&larr; Open the inspection report</a>
+
+  <div class="toc">
+    <a href="#start">Before you go</a>
+    <a href="#basics">The basics</a>
+    <a href="#s1">1 Details</a>
+    <a href="#s2">2 Provider audit</a>
+    <a href="#s3">3 Pest activity</a>
+    <a href="#s4">4 Devices</a>
+    <a href="#s5">5 Zones</a>
+    <a href="#s6">6 Conditions</a>
+    <a href="#s7">7 Ratings</a>
+    <a href="#s8">8 Photos</a>
+    <a href="#s9">9 Findings</a>
+    <a href="#s10">10 Compliance</a>
+    <a href="#s11">11 Sign-off</a>
+    <a href="#send">Save &amp; send</a>
+    <a href="#cheat">Pest cheat-sheet</a>
+  </div>
+
+  <!-- BEFORE -->
+  <h2 class="sec" id="start"><span class="sn">A</span>Before you go</h2>
+  <p><b>Bring:</b> a phone (charged) with this link saved, a good flashlight, a telescoping mirror if you have one, gloves, a notepad as backup, and your ID / license.</p>
+  <div class="box tip">
+    <div class="h">💾 How saving works</div>
+    Everything you type <b>auto-saves inside the browser on the phone you're using</b>. Use the <b>same phone and same browser</b> for the whole visit, and don't clear the browser history during the inspection. When you finish, you export a PDF — that PDF is what you keep and send. There is no login and nothing uploads to a server.
+  </div>
+  <p><b>Set expectations with the client:</b> explain you'll walk the whole facility, take photos of anything relevant, and ask to see their current provider's paperwork (service logbook, device map, product labels). Keep it professional and neutral.</p>
+
+  <!-- BASICS -->
+  <h2 class="sec" id="basics"><span class="sn">B</span>The basics — how the form works</h2>
+  <ul>
+    <li><b>Text boxes:</b> tap and type.</li>
+    <li><b>Colored chips</b> (like ratings): tap to select. Tap the same one again to unselect.</li>
+    <li><b>Yes / No / N/A buttons:</b> tap the one that applies. "N/A" = not applicable / couldn't check.</li>
+    <li><b>Photos:</b> tap <b>"Add photos"</b> — you can take a new photo or pick from the gallery, several at a time.</li>
+    <li><b>Signatures:</b> sign with your finger in the box.</li>
+    <li>When you're done, tap <b>"Save as PDF"</b> at the bottom.</li>
+  </ul>
+  <div class="box tip">
+    <div class="h">🎯 Rule of thumb for ratings</div>
+    <div class="legend">
+      <span class="chip c-good">Good / OK / Low</span>
+      <span class="chip c-warn">Fair / Watch / Moderate</span>
+      <span class="chip c-bad">Poor / Issue / High</span>
+      <span class="chip c-crit">Critical</span>
+    </div>
+    Green = acceptable, no action needed. Amber = minor issue, keep an eye on it. Red = real problem, needs correction. Use <b>Critical</b> only when there's active pest presence in a food area or a health/compliance risk.
+  </div>
+
+  <!-- 1 -->
+  <h2 class="sec" id="s1"><span class="sn">1</span>Inspection Details</h2>
+  <p>The header info. Fill the <b>client's business name and full address</b>, the <b>date</b>, who met you on site, and your <b>time in / time out</b>. Put your name as the inspector and your license number if you have one. "Facility type" and "Scope" are pre-filled for a bakery audit — leave them unless something differs.</p>
+
+  <!-- 2 -->
+  <h2 class="sec" id="s2"><span class="sn">2</span>Current Provider &amp; Program Audit</h2>
+  <p>This is where we evaluate the <b>incumbent provider</b>. Ask the client (or manager) who services them now, how often, and when they last came. Then ask to see their paperwork and mark the checklist:</p>
+  <ul>
+    <li><b>Service logbook</b> — is there a binder or app with visit records on site?</li>
+    <li><b>Application records</b> — what product, where, how much, by whom.</li>
+    <li><b>Product labels &amp; SDS</b> — must be available for anything applied.</li>
+    <li><b>Applicator license</b> — posted or on file.</li>
+    <li><b>Written IPM / scope plan</b>, <b>device map</b>, and <b>trend report</b> — the marks of a serious program.</li>
+  </ul>
+  <div class="box flag">
+    <div class="h">🚩 Common red flags to note</div>
+    Empty or missing logbook · no device map · same generic "sprayed baseboards" every visit · expired or unlabeled product · stations not on any map · long gaps between visits · no trend/analysis. Write these in <b>"Program observations."</b>
+  </div>
+
+  <!-- 3 -->
+  <h2 class="sec" id="s3"><span class="sn">3</span>Pest Activity Assessment</h2>
+  <p>For each pest, if you see <b>any</b> evidence, tap a <b>severity</b> and check the <b>evidence</b> types (droppings, live specimens, gnaw/damage, webbing/frass, infested product, reported sightings). Add the <b>location</b> in the notes box. If there's no sign of a pest, leave it blank or mark severity <b>None</b>.</p>
+  <div class="box tip">
+    <div class="h">🔦 How to judge severity</div>
+    <b>Low</b> = isolated/old evidence, one spot. <b>Moderate</b> = evidence in several areas or fresh signs. <b>High</b> = widespread, live activity, or product contamination. When unsure, photograph it and note what you saw — facts over guesses.
+  </div>
+  <p class="muted">See the <a href="#cheat">pest cheat-sheet</a> at the end for where each bakery pest hides and what its signs look like.</p>
+
+  <!-- 4 -->
+  <h2 class="sec" id="s4"><span class="sn">4</span>Monitoring &amp; Device Audit</h2>
+  <p>Count and inspect the existing devices — this tells you a lot about the current provider.</p>
+  <ul>
+    <li><b>Exterior rodent bait stations:</b> count them; are they <b>locked, anchored, labeled/dated</b>, and is the bait fresh (not moldy or gone)?</li>
+    <li><b>Interior rodent devices</b> (snap/glue/mechanical): are they placed along walls, accessible, and recently checked?</li>
+    <li><b>Insect light traps (ILTs / fly lights):</b> count them, look for a <b>bulb-change date</b> (bulbs should be replaced ~yearly), and whether trays are clean. They should be away from food-prep surfaces and not visible from outside.</li>
+    <li><b>Pheromone / stored-product monitors:</b> present? any catch?</li>
+  </ul>
+  <div class="box flag">
+    <div class="h">🚩 Red flags</div>
+    Unlocked or unanchored exterior stations · spoiled bait · devices that don't match any map · ILT bulbs years old · traps buried behind equipment where no one checks them.
+  </div>
+
+  <!-- 5 -->
+  <h2 class="sec" id="s5"><span class="sn">5</span>Facility Zone Inspection</h2>
+  <p>Walk the site in a logical loop and rate each area <b>OK / Watch / Issue</b>, writing what you find. Suggested route:</p>
+  <ol class="steps">
+    <li><b>Exterior perimeter &amp; foundation</b> — gaps, vegetation against walls, harborage, station spacing.</li>
+    <li><b>Receiving / dock</b> — door seals, gaps under doors, dock levelers, incoming-product condition.</li>
+    <li><b>Dry &amp; ingredient storage (flour room)</b> — the highest-risk area for stored-product pests. Check spillage, old product, webbing in corners.</li>
+    <li><b>Mixing &amp; prep</b> — flour dust under and behind equipment, crumbs, moisture.</li>
+    <li><b>Baking / oven area &amp; proofing</b> — warmth + moisture attract insects and drain flies.</li>
+    <li><b>Cooling &amp; packaging → finished-goods storage</b> — product protection, cleanliness.</li>
+    <li><b>Waste / dumpster area</b> — a major attractant; lids closed, area clean, distance from doors.</li>
+    <li><b>Break room, restrooms, roof &amp; utilities</b> — food debris, leaks, roof penetrations.</li>
+  </ol>
+
+  <!-- 6 -->
+  <h2 class="sec" id="s6"><span class="sn">6</span>Conducive Conditions</h2>
+  <p>These are the things that <b>invite</b> pests. Use the Yes/No/N/A checklists — <b>"Yes" means the good condition is met.</b> Three groups:</p>
+  <ul>
+    <li><b>Exclusion &amp; structure:</b> door sweeps, sealed gaps and utility penetrations, intact screens, self-closing doors.</li>
+    <li><b>Sanitation:</b> clean floors and drains, no flour-dust buildup, equipment cleaned under/behind, no standing water, waste managed.</li>
+    <li><b>Storage:</b> product off the floor, 18-inch wall clearance, FIFO rotation, sealed bulk containers, no damaged packaging.</li>
+  </ul>
+  <div class="box tip"><div class="h">✍️ Notes box</div> Summarize the biggest drivers here, e.g. "Flour dust accumulating under mixer line; gap under receiving door; two pallets stored directly on floor in dry storage."</div>
+
+  <!-- 7 -->
+  <h2 class="sec" id="s7"><span class="sn">7</span>Overall Ratings</h2>
+  <p>Give your professional read on <b>structural/exclusion</b>, <b>sanitation</b>, and the <b>current provider's effectiveness</b>, then an <b>overall risk level</b>. Finish with a <b>2&ndash;4 sentence executive summary</b> — this is the first thing the client reads, so make it plain: what you found and the bottom line.</p>
+  <div class="box good"><div class="h">Example summary</div> "Overall pest pressure is moderate and mostly tied to sanitation and exclusion gaps in the flour and dock areas. The current provider's program is minimal and poorly documented — no device map, no trend records, and several unserviced stations. With a structured IPM program and targeted exclusion, these risks are readily controllable."</div>
+
+  <!-- 8 -->
+  <h2 class="sec" id="s8"><span class="sn">8</span>Photo Evidence</h2>
+  <p>Photograph anything you rate Watch/Issue or any pest evidence. For each photo, add a short <b>caption</b> (what it shows) and the <b>location</b>. Good photos to capture:</p>
+  <ul>
+    <li>Gaps under doors / unsealed penetrations</li>
+    <li>Flour or debris buildup under equipment</li>
+    <li>Droppings, gnaw marks, webbing, insects, or damaged product</li>
+    <li>Device condition (open/unlocked stations, old ILT bulbs, dirty trays)</li>
+    <li>Overall shots of each key area</li>
+  </ul>
+  <div class="box tip"><div class="h">📷 Tip</div> Take the photo <b>through the form's "Add photos" button</b> so it attaches to the report. Wide shot for context, then a close-up of the detail.</div>
+
+  <!-- 9 -->
+  <h2 class="sec" id="s9"><span class="sn">9</span>Findings &amp; Recommendations</h2>
+  <p>Tap <b>"+ Add finding"</b> for each issue. Give it a <b>priority</b> (High / Medium / Low), describe the <b>finding</b>, and the <b>recommended corrective action</b>. Keep each one specific and actionable.</p>
+  <div class="box good"><div class="h">Good example</div> <b>Priority: High</b> — "Fresh rodent droppings along the north wall of dry storage; gap under the receiving door allows entry." → <b>Action:</b> "Install a door sweep on the receiving door, seal the wall gap, and place two monitored snap stations along the runway; recheck in 7 days."</div>
+  <p>Then fill <b>"BioPest USA proposed program"</b> — how we'd service them (IPM approach, frequency, exclusion/sanitation work, monitoring, documentation and audit-readiness, next steps).</p>
+
+  <!-- 10 -->
+  <h2 class="sec" id="s10"><span class="sn">10</span>Standards &amp; Compliance Context</h2>
+  <p>This section is mostly informational for the client (Illinois licensing, FDA Food Code / FSMA, third-party audits, EPA labeling). In the notes box, list any <b>documentation or compliance gaps</b> you found that tie back to those points — e.g. "No SDS on site," "Provider license not verifiable," "Not audit-ready: no device map or trend data."</p>
+
+  <!-- 11 -->
+  <h2 class="sec" id="s11"><span class="sn">11</span>Sign-off</h2>
+  <p>Sign in the <b>Inspector</b> box and type your name and date. If a client representative is present and willing, have them sign the <b>Client acknowledgment</b> box (this just confirms the visit happened — it is not an admission of anything).</p>
+
+  <hr class="rule">
+
+  <!-- SEND -->
+  <h2 class="sec" id="send"><span class="sn">C</span>Save the report &amp; send it</h2>
+  <p>Tap <b>"Save as PDF"</b> at the bottom. Your phone's print screen opens — choose <b>Save as PDF</b>, then share it.</p>
+  <h3>On iPhone</h3>
+  <ol class="steps">
+    <li>Tap <b>"Save as PDF"</b> in the form.</li>
+    <li>On the print preview, pinch <b>out</b> (zoom) on the page thumbnail to open it as a PDF.</li>
+    <li>Tap the <b>Share</b> icon → <b>Save to Files</b>, or email / message it directly.</li>
+  </ol>
+  <h3>On Android</h3>
+  <ol class="steps">
+    <li>Tap <b>"Save as PDF"</b> in the form.</li>
+    <li>In the print dialog, set the destination to <b>"Save as PDF"</b> and tap the download button.</li>
+    <li>Find it in Downloads and share via email / WhatsApp.</li>
+  </ol>
+  <div class="box tip"><div class="h">✅ Before you send</div> Open the PDF and scan it once — check the photos came through and the summary reads clearly. Then send it to the client (and keep a copy for BioPest USA).</div>
+
+  <!-- CHEAT SHEET -->
+  <h2 class="sec" id="cheat"><span class="sn">D</span>Bakery pest cheat-sheet</h2>
+  <p class="muted">Where to look and what the signs look like — the pests that matter most in a bakery.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Pest</th><th>Where it hides</th><th>Signs to look for</th></tr></thead>
+      <tbody>
+        <tr><td><b>House mouse</b> <i>Mus musculus</i></td><td>Wall voids, behind/under equipment, dry storage, false ceilings</td><td>Rice-grain droppings, gnaw marks, grease rub-marks, shredded nesting, ammonia smell</td></tr>
+        <tr><td><b>Norway rat</b> <i>Rattus norvegicus</i></td><td>Ground level, near dock/waste, burrows outside foundation</td><td>Large capsule droppings, burrows, gnawed packaging, runways along walls</td></tr>
+        <tr><td><b>Indianmeal moth</b> <i>Plodia interpunctella</i></td><td>Flour/grain storage, corners, ceiling edges, in product</td><td>Webbing in product and wall/ceiling junctions, small moths flying at dusk, larvae</td></tr>
+        <tr><td><b>Sawtoothed grain beetle</b> <i>Oryzaephilus</i></td><td>Flour, mixes, spilled product, cracks and seams</td><td>Tiny slender brown beetles in/near product, activity in spillage</td></tr>
+        <tr><td><b>Flour beetles</b> <i>Tribolium</i></td><td>Flour, bran, product residue in equipment</td><td>Small reddish-brown beetles; product may smell off / discolor</td></tr>
+        <tr><td><b>Weevils</b> <i>Sitophilus</i></td><td>Whole grains, older ingredient stock</td><td>Beetles with a snout; holes in grains</td></tr>
+        <tr><td><b>German cockroach</b> <i>Blattella germanica</i></td><td>Warm/moist harborage: motors, cracks, under equipment, drains</td><td>Live roaches, pepper-like droppings, egg cases, musty smell</td></tr>
+        <tr><td><b>Fruit flies</b> <i>Drosophila</i></td><td>Fermenting residue, drains, mop sinks, fruit/juice, recycling</td><td>Small flies hovering near drains and sweet residue</td></tr>
+        <tr><td><b>Drain / phorid flies</b></td><td>Floor drains, under equipment, organic slime lines</td><td>Tiny flies emerging from drains; test with a cup over the drain</td></tr>
+        <tr><td><b>Ants</b></td><td>Trails along walls/floors, entry points, sweet spills</td><td>Foraging trails, especially near sugar/dough and moisture</td></tr>
+        <tr><td><b>Birds</b> (pigeon / sparrow)</td><td>Roof, ledges, dock, signage, open doors</td><td>Droppings, nests, feathers near receiving/roof</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <a class="backbtn" href="./" style="margin-top:24px">&larr; Open the inspection report</a>
+
+  <div class="footer">
+    BioPest USA &middot; Field guide for internal use by BioPest USA technicians. This document supports the technical inspection report and does not replace professional judgment or applicable licensing requirements.
+  </div>
+
+</div>
+</body>
+</html>
