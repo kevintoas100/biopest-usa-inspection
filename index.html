@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0033cc">
-<title>BioPest USA — Pest Inspection Report</title>
+<title>Fleasty Boys — Pest Inspection Report</title>
 <style>
   :root{
     --brand:#0033cc; --brand-2:#1d4ed8; --brand-3:#2563eb;
@@ -37,6 +37,10 @@
   .dots span{ width:11px; height:11px; border-radius:50%; background:#fff; display:block; }
   .wordmark{ font-size:34px; font-weight:800; letter-spacing:-.03em; line-height:1; display:flex; align-items:center; }
   .wordmark .pest{ background:#fff; color:#0033cc; padding:4px 9px; margin-left:6px; border-radius:8px; }
+  /* Brand logo lockup — black logo sits on a white card over the header */
+  .logocard{ display:inline-block; background:#fff; border-radius:16px; padding:14px 26px; box-shadow:0 6px 22px rgba(0,0,0,.22); }
+  .logocard .logo{ display:block; height:60px; width:auto; max-width:78vw; }
+  .logofallback{ display:none; font-family:Georgia,"Times New Roman",serif; font-style:italic; font-weight:700; font-size:34px; color:#111; letter-spacing:-.01em; }
   .masthead .kicker{ margin-top:14px; font-size:11px; letter-spacing:.32em; font-weight:600; color:rgba(255,255,255,.62); text-transform:uppercase; }
   .masthead h1{ margin:8px 0 0; font-size:22px; font-weight:600; letter-spacing:-.02em; }
   .masthead .sub{ margin-top:4px; font-size:13.5px; color:rgba(255,255,255,.75); }
@@ -243,11 +247,11 @@
 
 
 <header class="masthead">
-  <div class="brandrow">
-    <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="wordmark">BIO<span class="pest">PEST</span></div>
+  <div class="logocard">
+    <img src="logo.png" alt="Fleasty Boys" class="logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+    <span class="logofallback">Fleasty Boys</span>
   </div>
-  <div class="kicker">USA &middot; Chicago, Illinois</div>
+  <div class="kicker">Pest Control &middot; Chicago, Illinois</div>
   <h1>Technical Pest Inspection Report</h1>
   <div class="sub">Independent evaluation of the current pest management program</div>
   <div class="contact no-print">
@@ -277,7 +281,7 @@
       <div class="field"><label>Contact on site</label><input type="text" data-k="d_contact" placeholder="Name / role"></div>
       <div class="field"><label>Time in</label><input type="time" data-k="d_in"></div>
       <div class="field"><label>Time out</label><input type="time" data-k="d_out"></div>
-      <div class="field"><label>Inspector (BioPest USA)</label><input type="text" data-k="d_inspector" placeholder="Technician name"></div>
+      <div class="field"><label>Inspector (Fleasty Boys)</label><input type="text" data-k="d_inspector" placeholder="Technician name"></div>
       <div class="field"><label>Inspector license #</label><input type="text" data-k="d_inslic" placeholder="IL structural pest control lic."></div>
       <div class="field" style="grid-column:1/-1"><label>Scope of visit</label><input type="text" data-k="d_scope" value="Third-party technical audit of existing pest control service and current site conditions"></div>
     </div>
@@ -378,7 +382,7 @@
     <p class="hint">Prioritized corrective actions. Add one row per finding.</p>
     <div id="findings"></div>
     <button class="addbtn no-print" id="addFinding" type="button">+ Add finding</button>
-    <div class="field" style="margin-top:18px"><label>BioPest USA proposed program</label><textarea data-k="proposal" placeholder="Recommended IPM approach, service frequency, exclusion/sanitation work, monitoring plan, documentation and audit-readiness, and next steps." style="min-height:110px"></textarea></div>
+    <div class="field" style="margin-top:18px"><label>Fleasty Boys proposed program</label><textarea data-k="proposal" placeholder="Recommended IPM approach, service frequency, exclusion/sanitation work, monitoring plan, documentation and audit-readiness, and next steps." style="min-height:110px"></textarea></div>
   </section>
 
   <!-- 10. Compliance note -->
@@ -403,7 +407,7 @@
       <div>
         <div class="signpad">
           <canvas data-sig="insp"></canvas>
-          <div class="sfoot"><span class="sname">Inspector — BioPest USA</span><button type="button" class="no-print" data-clear="insp">Clear</button></div>
+          <div class="sfoot"><span class="sname">Inspector — Fleasty Boys</span><button type="button" class="no-print" data-clear="insp">Clear</button></div>
         </div>
         <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_insp_name" placeholder="Inspector name — date"></div>
       </div>
@@ -415,7 +419,7 @@
         <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_client_name" placeholder="Client rep name — date"></div>
       </div>
     </div>
-    <p class="hint" style="margin-left:0;margin-top:14px">This report reflects conditions observed at the time of inspection and is provided by BioPest USA as an independent technical evaluation.</p>
+    <p class="hint" style="margin-left:0;margin-top:14px">This report reflects conditions observed at the time of inspection and is provided by Fleasty Boys as an independent technical evaluation.</p>
   </section>
 
 </div>
