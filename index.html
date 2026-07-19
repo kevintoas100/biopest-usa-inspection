@@ -135,6 +135,28 @@
     background:var(--surface-2); border:1.5px solid transparent; border-radius:7px; padding:5px 9px; cursor:pointer; }
   .evchip.on{ background:var(--brand); color:#fff; }
 
+  /* ── Traffic-light (semáforo) per pest ── */
+  .lights{ display:flex; gap:6px; flex-wrap:wrap; }
+  .lights button{ display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:12.5px; font-weight:600;
+    border:1.5px solid var(--line); background:#fff; color:var(--ink-3); border-radius:999px; padding:7px 13px; cursor:pointer; transition:all .12s; }
+  .lights button .dot{ width:12px; height:12px; border-radius:50%; flex:none; }
+  .lights button[data-l=green] .dot{ background:var(--good); }
+  .lights button[data-l=yellow] .dot{ background:var(--warn); }
+  .lights button[data-l=red] .dot{ background:var(--bad); }
+  .lights button.on[data-l=green]{ background:var(--good-soft); border-color:var(--good); color:#0f6b39; }
+  .lights button.on[data-l=yellow]{ background:var(--warn-soft); border-color:var(--warn); color:#7a5900; }
+  .lights button.on[data-l=red]{ background:var(--bad-soft); border-color:var(--bad); color:#8f251a; }
+
+  /* ── Mini photo adder (per finding / per zone) ── */
+  .miniphoto{ margin-top:12px; }
+  .minithumbs{ display:flex; flex-wrap:wrap; gap:8px; }
+  .minithumb{ position:relative; width:88px; height:88px; border-radius:10px; overflow:hidden; border:1px solid var(--line); }
+  .minithumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .minirm{ position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:rgba(0,0,0,.55); color:#fff; border:none; cursor:pointer; font-size:11px; line-height:1; }
+  .miniadd{ margin-top:8px; display:inline-flex; align-items:center; gap:7px; background:var(--surface-2); color:var(--brand);
+    border:1.5px solid var(--line); border-radius:999px; padding:8px 14px; font-family:inherit; font-weight:600; font-size:13px; cursor:pointer; }
+  .miniadd:hover{ background:#eef2ff; }
+
   /* ── Zones ── */
   .zone{ padding:14px 0; border-bottom:1px solid var(--line-2); }
   .zone:last-child{ border-bottom:none; }
@@ -200,8 +222,9 @@
     body{ background:#fff; }
     .wrap{ padding:0; max-width:none; }
     .no-print{ display:none !important; }
-    .usage,.actionbar,.uploadbtn,.addbtn,.chips button:not(.on),.tri button:not(.on),.evchip:not(.on){ display:none !important; }
-    .chips button.on,.tri button.on,.evchip.on{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .usage,.actionbar,.uploadbtn,.addbtn,.miniadd,.chips button:not(.on),.tri button:not(.on),.evchip:not(.on),.lights button:not(.on){ display:none !important; }
+    .chips button.on,.tri button.on,.evchip.on,.lights button.on{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .minithumb{ break-inside:avoid; }
     header.masthead{ -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:16px; }
     .contact input{ border:none; background:none; color:#fff; }
     section.card{ box-shadow:none; border:1px solid #d5d5da; break-inside:avoid; page-break-inside:avoid; margin-top:12px; }
@@ -278,7 +301,7 @@
   <!-- 3. Pest activity -->
   <section class="card">
     <div class="sec-head"><span class="sec-num">3</span><h2>Pest Activity Assessment</h2></div>
-    <p class="hint">Target pests for a Chicago bakery. Mark presence, severity and the evidence observed.</p>
+    <p class="hint">Target pests for a Chicago bakery. Tap the traffic light for each: green = none, yellow = monitor, red = active.</p>
     <div id="pests"></div>
   </section>
 
@@ -407,7 +430,7 @@
 (function(){
   "use strict";
   var LS = "biopest_usa_inspection_v1";
-  var state = { fields:{}, groups:{}, tris:{}, evi:{}, photos:[], findings:[], sigs:{} };
+  var state = { fields:{}, groups:{}, tris:{}, pest:{}, photos:[], zonePhotos:{}, findings:[], sigs:{} };
 
   /* ---------- data definitions ---------- */
   var DOCS = [
@@ -554,51 +577,41 @@
     });
   }
 
-  /* ---------- pests ---------- */
+  /* ---------- pests (traffic-light) ---------- */
   function buildPests(){
     var host=document.getElementById("pests"); if(!host) return;
-    state.evi=state.evi||{};
+    state.pest=state.pest||{};
     var idx=0;
     PESTS.forEach(function(grp){
       var gwrap=el("div","pestgroup");
       gwrap.appendChild(el("div","gtitle",grp[0]));
       grp[1].forEach(function(p){
         var i=idx++; var key="pest_"+i;
-        state.evi[key]=state.evi[key]||{sev:null,ev:{},notes:""};
+        state.pest[key]=state.pest[key]||{light:null,notes:""};
         var row=el("div","pest");
-        var name=el("div"); name.innerHTML='<span class="pname">'+p[0]+'</span> &nbsp;<span class="plat">'+p[1]+'</span>';
+        var name=el("div");
+        var pn=el("span","pname"); pn.textContent=p[0];
+        var pl=el("span","plat"); pl.textContent=" "+p[1];
+        name.appendChild(pn); name.appendChild(pl);
         row.appendChild(name);
-        // severity chips
-        var sev=el("div","chips");
-        [["None","good"],["Low","warn"],["Moderate","warn"],["High","bad"]].forEach(function(s){
-          var b=el("button",null,s[0]); b.setAttribute("data-tone",s[1]==="warn"&&s[0]==="Moderate"?"warn":s[1]);
-          if(state.evi[key].sev===s[0]) b.classList.add("on");
+        // traffic light
+        var lights=el("div","lights");
+        [["green","None"],["yellow","Watch"],["red","Active"]].forEach(function(s){
+          var b=el("button",null,'<span class="dot"></span>'+s[1]); b.setAttribute("data-l",s[0]);
+          if(state.pest[key].light===s[0]) b.classList.add("on");
           b.addEventListener("click", function(){
-            var cur=state.evi[key].sev===s[0];
-            sev.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
-            if(cur){ state.evi[key].sev=null; } else { b.classList.add("on"); state.evi[key].sev=s[0]; }
+            var cur=state.pest[key].light===s[0];
+            lights.querySelectorAll("button").forEach(function(x){x.classList.remove("on");});
+            if(cur){ state.pest[key].light=null; } else { b.classList.add("on"); state.pest[key].light=s[0]; }
             save();
           });
-          sev.appendChild(b);
+          lights.appendChild(b);
         });
-        row.appendChild(sev);
-        // evidence chips
-        var evi=el("div","pevi");
-        EVIDENCE.forEach(function(ev){
-          var b=el("button","evchip",ev);
-          if(state.evi[key].ev[ev]) b.classList.add("on");
-          b.addEventListener("click", function(){
-            if(state.evi[key].ev[ev]){ delete state.evi[key].ev[ev]; b.classList.remove("on"); }
-            else { state.evi[key].ev[ev]=true; b.classList.add("on"); }
-            save();
-          });
-          evi.appendChild(b);
-        });
-        row.appendChild(evi);
-        // notes
+        row.appendChild(lights);
+        // optional note
         var nwrap=el("div","pnotes");
-        var ni=el("input"); ni.type="text"; ni.placeholder="Location / notes"; ni.value=state.evi[key].notes||"";
-        ni.addEventListener("input", function(){ state.evi[key].notes=ni.value; save(); });
+        var ni=el("input"); ni.type="text"; ni.placeholder="Location / notes (optional)"; ni.value=state.pest[key].notes||"";
+        ni.addEventListener("input", function(){ state.pest[key].notes=ni.value; save(); });
         nwrap.appendChild(ni); row.appendChild(nwrap);
         gwrap.appendChild(row);
       });
@@ -610,8 +623,10 @@
   function buildZones(){
     var host=document.getElementById("zones"); if(!host) return;
     state.tris.zones=state.tris.zones||{};
+    state.zonePhotos=state.zonePhotos||{};
     ZONES.forEach(function(z,i){
       var key="zone_"+i;
+      state.zonePhotos[i]=state.zonePhotos[i]||[];
       state.fields[key]=state.fields[key]; // keep
       var wrap=el("div","zone");
       var zh=el("div","zh");
@@ -634,6 +649,7 @@
       if(state.fields[key]!=null) ta.value=state.fields[key];
       ta.addEventListener("input", function(){ state.fields[key]=ta.value; save(); });
       wrap.appendChild(ta);
+      wrap.appendChild(makePhotoBlock(state.zonePhotos[i]));
       host.appendChild(wrap);
     });
   }
@@ -675,6 +691,32 @@
     };
     reader.readAsDataURL(file);
   }
+  // Reusable photo block bound to an array — used per finding and per zone.
+  function makePhotoBlock(arr){
+    var block=el("div","miniphoto");
+    var thumbs=el("div","minithumbs");
+    var inp=el("input"); inp.type="file"; inp.accept="image/*"; inp.multiple=true; inp.setAttribute("capture","environment"); inp.style.display="none";
+    var btn=el("button","miniadd no-print",'&#128247; Add photo'); btn.type="button";
+    function render(){
+      thumbs.innerHTML="";
+      arr.forEach(function(ph,i){
+        var t=el("div","minithumb");
+        var img=el("img"); img.src=ph.data; img.alt="photo"; t.appendChild(img);
+        var rm=el("button","minirm no-print",'&#10005;'); rm.type="button";
+        rm.addEventListener("click", function(){ arr.splice(i,1); render(); save(); });
+        t.appendChild(rm); thumbs.appendChild(t);
+      });
+    }
+    btn.addEventListener("click", function(){ inp.click(); });
+    inp.addEventListener("change", function(){
+      var files=Array.prototype.slice.call(inp.files||[]); var pending=files.length;
+      files.forEach(function(f){ compress(f, function(data){ arr.push({data:data}); pending--; if(pending<=0){ render(); save(); } }); });
+      inp.value="";
+    });
+    render();
+    block.appendChild(thumbs); block.appendChild(inp); block.appendChild(btn);
+    return block;
+  }
   function bindPhotos(){
     var btn=document.getElementById("addPhoto"), inp=document.getElementById("photoInput");
     if(!btn||!inp) return;
@@ -712,19 +754,21 @@
       var rmv=el("button","frm no-print","Remove"); rmv.addEventListener("click", function(){ state.findings.splice(i,1); renderFindings(); save(); });
       sev.appendChild(rmv);
       row.appendChild(sev);
+      f.photos=f.photos||[];
       var body=el("div");
       var t1=el("textarea"); t1.placeholder="Finding / observation"; t1.value=f.text||"";
       t1.addEventListener("input", function(){ f.text=t1.value; save(); });
       var t2=el("textarea"); t2.placeholder="Recommended corrective action"; t2.value=f.action||""; t2.style.marginTop="8px";
       t2.addEventListener("input", function(){ f.action=t2.value; save(); });
       body.appendChild(t1); body.appendChild(t2);
+      body.appendChild(makePhotoBlock(f.photos));
       row.appendChild(body);
       host.appendChild(row);
     });
   }
   function bindFindings(){
     var add=document.getElementById("addFinding");
-    if(add) add.addEventListener("click", function(){ state.findings.push({sev:null,text:"",action:""}); renderFindings(); save(); });
+    if(add) add.addEventListener("click", function(){ state.findings.push({sev:null,text:"",action:"",photos:[]}); renderFindings(); save(); });
   }
 
   /* ---------- signatures ---------- */
