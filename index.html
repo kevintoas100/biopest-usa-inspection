@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0033cc">
-<title>BioPest USA â Pest Inspection Report</title>
+<title>BioPest USA — Pest Inspection Report</title>
 <style>
   :root{
     --brand:#0033cc; --brand-2:#1d4ed8; --brand-3:#2563eb;
@@ -27,7 +27,7 @@
   }
   .wrap{ max-width:940px; margin:0 auto; padding:0 16px 140px; }
 
-  /* ââ Brand header ââ */
+  /* ── Brand header ── */
   header.masthead{
     background:radial-gradient(120% 90% at 50% 0%, #1d4ed8 0%, #0033cc 46%, #001a66 100%);
     color:#fff; padding:30px 16px 26px; text-align:center;
@@ -41,7 +41,7 @@
   .masthead h1{ margin:8px 0 0; font-size:22px; font-weight:600; letter-spacing:-.02em; }
   .masthead .sub{ margin-top:4px; font-size:13.5px; color:rgba(255,255,255,.75); }
 
-  /* contact strip (editable) â high specificity so the generic form-input
+  /* contact strip (editable) — high specificity so the generic form-input
      rule below (light-grey, width:100%) never overrides these. */
   .masthead .contact{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:18px auto 0; max-width:600px; }
   .masthead .contact input{
@@ -52,14 +52,14 @@
   .masthead .contact input::placeholder{ color:rgba(255,255,255,.6); }
   .masthead .contact input:focus{ outline:none; border-color:#fff; background:rgba(255,255,255,.22); }
 
-  /* ââ Usage note (screen only) ââ */
+  /* ── Usage note (screen only) ── */
   .usage{
     max-width:940px; margin:14px auto 0; padding:10px 14px; font-size:12.5px; color:var(--ink-3);
     background:var(--warn-soft); border:1px solid rgba(184,134,11,.25); border-radius:var(--r-md);
     display:flex; gap:8px; align-items:flex-start;
   }
 
-  /* ââ Section cards ââ */
+  /* ── Section cards ── */
   section.card{
     background:var(--surface); border:1px solid var(--line); border-radius:var(--r-xl);
     padding:22px; margin-top:16px; box-shadow:0 1px 2px rgba(0,0,0,.03);
@@ -74,7 +74,7 @@
   .card .hint{ font-size:12.5px; color:var(--ink-4); margin:2px 0 0 36px; }
   .eyebrow{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-4); }
 
-  /* ââ Fields ââ */
+  /* ── Fields ── */
   .grid{ display:grid; gap:14px; margin-top:16px; }
   .g2{ grid-template-columns:1fr 1fr; }
   .g3{ grid-template-columns:1fr 1fr 1fr; }
@@ -93,7 +93,7 @@
     background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; cursor:pointer;
   }
 
-  /* ââ Rating / choice chips ââ */
+  /* ── Rating / choice chips ── */
   .chips{ display:flex; flex-wrap:wrap; gap:6px; }
   .chips button{
     font-family:inherit; font-size:12.5px; font-weight:500; color:var(--ink-2);
@@ -108,7 +108,7 @@
   .chips button.on[data-tone=crit]{ background:#7f1d1d; }
   .chips button.on[data-tone=neutral]{ background:var(--brand); }
 
-  /* ââ Checklist (present/missing) ââ */
+  /* ── Checklist (present/missing) ── */
   .checklist{ display:flex; flex-direction:column; gap:2px; margin-top:14px; }
   .clitem{ display:flex; align-items:center; gap:12px; padding:9px 2px; border-bottom:1px solid var(--line-2); }
   .clitem:last-child{ border-bottom:none; }
@@ -120,7 +120,7 @@
   .tri button.on[data-v=no]{ background:var(--bad-soft); border-color:var(--bad); color:#8f251a; }
   .tri button.on[data-v=na]{ background:var(--surface-3); border-color:var(--ink-4); color:var(--ink-2); }
 
-  /* ââ Pest matrix ââ */
+  /* ── Pest matrix ── */
   .pestgroup{ margin-top:18px; }
   .pestgroup > .gtitle{ font-size:12px; font-weight:700; color:var(--brand); letter-spacing:.02em; margin:0 0 6px; text-transform:uppercase; }
   .pest{ display:grid; grid-template-columns:1fr auto; gap:10px 12px; align-items:center;
@@ -135,13 +135,13 @@
     background:var(--surface-2); border:1.5px solid transparent; border-radius:7px; padding:5px 9px; cursor:pointer; }
   .evchip.on{ background:var(--brand); color:#fff; }
 
-  /* ââ Zones ââ */
+  /* ── Zones ── */
   .zone{ padding:14px 0; border-bottom:1px solid var(--line-2); }
   .zone:last-child{ border-bottom:none; }
   .zone .zh{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
   .zone .zh .zname{ font-size:14px; font-weight:600; }
 
-  /* ââ Photos ââ */
+  /* ── Photos ── */
   .uploadbtn{ display:inline-flex; align-items:center; gap:8px; margin-top:14px;
     background:linear-gradient(135deg,#0033cc,#1d4ed8); color:#fff; border:none; cursor:pointer;
     font-family:inherit; font-size:14px; font-weight:600; padding:11px 18px; border-radius:999px; }
@@ -155,7 +155,7 @@
   .photo .meta input{ font-size:12.5px; padding:8px 10px; }
   .photo .capnum{ font-size:11px; font-weight:700; color:var(--brand); }
 
-  /* ââ Findings repeater ââ */
+  /* ── Findings repeater ── */
   .finding{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; padding:14px 0; border-bottom:1px solid var(--line-2); align-items:start; }
   .finding:last-child{ border-bottom:none; }
   .finding .fsev{ display:flex; flex-direction:column; gap:5px; }
@@ -165,13 +165,13 @@
     border-radius:var(--r-md); padding:11px; width:100%; cursor:pointer; font-family:inherit; font-weight:600; font-size:13.5px; }
   .addbtn:hover{ background:#eef2ff; }
 
-  /* ââ Regulatory info card ââ */
+  /* ── Regulatory info card ── */
   .infocard{ background:var(--surface-2); border:1px solid var(--line); border-radius:var(--r-lg); padding:16px 18px; margin-top:16px; }
   .infocard h3{ font-size:13px; margin:0 0 8px; color:var(--brand); letter-spacing:-.01em; }
   .infocard ul{ margin:0; padding-left:18px; }
   .infocard li{ font-size:12.8px; color:var(--ink-2); margin:5px 0; line-height:1.45; }
 
-  /* ââ Signatures ââ */
+  /* ── Signatures ── */
   .signgrid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
   @media (max-width:640px){ .signgrid{ grid-template-columns:1fr; } }
   .signpad{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:#fff; }
@@ -180,7 +180,7 @@
   .signpad .sfoot .sname{ font-size:12px; color:var(--ink-3); }
   .signpad .sfoot button{ background:none; border:none; color:var(--link); font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; }
 
-  /* ââ Sticky action bar ââ */
+  /* ── Sticky action bar ── */
   .actionbar{ position:fixed; bottom:0; left:0; right:0; z-index:40;
     background:rgba(255,255,255,.86); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
     border-top:1px solid var(--line); padding:12px 16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
@@ -194,7 +194,7 @@
   .print-only{ display:none; }
   .print-value{ display:none; white-space:pre-wrap; font-size:13px; color:var(--ink); }
 
-  /* ââââââââ PRINT ââââââââ */
+  /* ════════ PRINT ════════ */
   @media print{
     @page{ margin:14mm 12mm; }
     body{ background:#fff; }
@@ -237,8 +237,8 @@
 </header>
 
 <div class="usage no-print">
-  <span>ð</span>
-  <span><b>How to use:</b> Fill this out on-site (works on phone, tablet or laptop). Your answers and photos auto-save in this browser. When you're done, press <b>âSave as PDFâ</b> to generate the clean report to send the client. Share this link with the team to reuse the format for any inspection. <a href="guide.html" style="color:var(--link);font-weight:600;text-decoration:none">📖 How to fill this out →</a></span>
+  <span>&#128073;</span>
+  <span><b>How to use:</b> Fill this out on-site (works on phone, tablet or laptop). Your answers and photos auto-save in this browser. When you're done, press <b>&ldquo;Save as PDF&rdquo;</b> to generate the clean report to send the client. Share this link with the team to reuse the format for any inspection. <a href="guide.html" style="color:var(--link);font-weight:600;text-decoration:none">&#128214; How to fill this out &#8594;</a></span>
 </div>
 
 <div class="wrap">
@@ -288,9 +288,9 @@
     <p class="hint">Condition and servicing of the existing monitoring program.</p>
 
     <div class="grid g3" style="margin-top:6px">
-      <div class="field"><label>Exterior rodent bait stations â count</label><input type="number" data-k="m_ext_ct" min="0" placeholder="#"></div>
-      <div class="field"><label>Interior rodent devices â count</label><input type="number" data-k="m_int_ct" min="0" placeholder="#"></div>
-      <div class="field"><label>Insect light traps (ILTs) â count</label><input type="number" data-k="m_ilt_ct" min="0" placeholder="#"></div>
+      <div class="field"><label>Exterior rodent bait stations — count</label><input type="number" data-k="m_ext_ct" min="0" placeholder="#"></div>
+      <div class="field"><label>Interior rodent devices — count</label><input type="number" data-k="m_int_ct" min="0" placeholder="#"></div>
+      <div class="field"><label>Insect light traps (ILTs) — count</label><input type="number" data-k="m_ilt_ct" min="0" placeholder="#"></div>
     </div>
 
     <p class="eyebrow" style="margin-top:18px">Device program condition</p>
@@ -313,7 +313,7 @@
   <!-- 6. Conducive conditions -->
   <section class="card">
     <div class="sec-head"><span class="sec-num">6</span><h2>Conducive Conditions</h2></div>
-    <p class="hint">Sanitation, exclusion, storage and moisture â the drivers of pest pressure in a bakery.</p>
+    <p class="hint">Sanitation, exclusion, storage and moisture — the drivers of pest pressure in a bakery.</p>
 
     <p class="eyebrow" style="margin-top:12px">Exclusion &amp; structure</p>
     <div class="checklist" id="cl_excl"></div>
@@ -337,14 +337,14 @@
       <div class="field"><label>Overall pest risk level</label><div class="chips" data-group="r_risk">
         <button data-tone="good" data-v="Low">Low</button><button data-tone="warn" data-v="Moderate">Moderate</button><button data-tone="bad" data-v="High">High</button><button data-tone="crit" data-v="Critical">Critical</button></div></div>
     </div>
-    <div class="field" style="margin-top:16px"><label>Executive summary</label><textarea data-k="sum" placeholder="2â4 sentence summary of what was found and the bottom line for the client." style="min-height:96px"></textarea></div>
+    <div class="field" style="margin-top:16px"><label>Executive summary</label><textarea data-k="sum" placeholder="2–4 sentence summary of what was found and the bottom line for the client." style="min-height:96px"></textarea></div>
   </section>
 
   <!-- 8. Photos -->
   <section class="card">
     <div class="sec-head"><span class="sec-num">8</span><h2>Photo Evidence</h2></div>
     <p class="hint">Add photos of findings. Each one carries a caption and location onto the report.</p>
-    <button class="uploadbtn no-print" id="addPhoto" type="button">ð· Add photos</button>
+    <button class="uploadbtn no-print" id="addPhoto" type="button">📷 Add photos</button>
     <input type="file" id="photoInput" accept="image/*" multiple capture="environment" style="display:none">
     <div class="photogrid" id="photogrid"></div>
   </section>
@@ -366,7 +366,7 @@
       <ul>
         <li><b>Illinois Structural Pest Control Act (IDPH):</b> commercial applications must be performed by licensed/certified technicians with proper records and service documentation.</li>
         <li><b>FDA Food Code &amp; FSMA preventive controls:</b> an active pest management program with monitoring and corrective actions is expected; pest activity in production areas is a critical violation.</li>
-        <li><b>Third-party audit readiness (SQF / BRCGS / AIB):</b> require a device map, trend analysis, service logs, corrective-action tracking and an IPM plan â commonly the biggest gaps we find.</li>
+        <li><b>Third-party audit readiness (SQF / BRCGS / AIB):</b> require a device map, trend analysis, service logs, corrective-action tracking and an IPM plan — commonly the biggest gaps we find.</li>
         <li><b>EPA label &amp; recordkeeping:</b> products must be labeled, stored correctly, applied per label, with SDS and application records on site.</li>
       </ul>
     </div>
@@ -380,16 +380,16 @@
       <div>
         <div class="signpad">
           <canvas data-sig="insp"></canvas>
-          <div class="sfoot"><span class="sname">Inspector â BioPest USA</span><button type="button" class="no-print" data-clear="insp">Clear</button></div>
+          <div class="sfoot"><span class="sname">Inspector — BioPest USA</span><button type="button" class="no-print" data-clear="insp">Clear</button></div>
         </div>
-        <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_insp_name" placeholder="Inspector name â date"></div>
+        <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_insp_name" placeholder="Inspector name — date"></div>
       </div>
       <div>
         <div class="signpad">
           <canvas data-sig="client"></canvas>
           <div class="sfoot"><span class="sname">Client acknowledgment</span><button type="button" class="no-print" data-clear="client">Clear</button></div>
         </div>
-        <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_client_name" placeholder="Client rep name â date"></div>
+        <div class="field" style="margin-top:10px"><label>Name &amp; date</label><input type="text" data-k="sig_client_name" placeholder="Client rep name — date"></div>
       </div>
     </div>
     <p class="hint" style="margin-left:0;margin-top:14px">This report reflects conditions observed at the time of inspection and is provided by BioPest USA as an independent technical evaluation.</p>
@@ -398,8 +398,8 @@
 </div>
 
 <div class="actionbar no-print">
-  <span class="status" id="status">Auto-savingâ¦</span>
-  <button class="btn primary" id="btnPrint" type="button">â¬ Save as PDF</button>
+  <span class="status" id="status">Auto-saving…</span>
+  <button class="btn primary" id="btnPrint" type="button">⬇ Save as PDF</button>
   <button class="btn ghost" id="btnClear" type="button">Clear form</button>
 </div>
 
@@ -500,7 +500,7 @@
   function save(){
     try{
       localStorage.setItem(LS, JSON.stringify(state));
-      var s=document.getElementById("status"); if(s){ s.textContent="Saved â"; clearTimeout(save._t); save._t=setTimeout(function(){ s.textContent="Auto-savingâ¦"; },1200); }
+      var s=document.getElementById("status"); if(s){ s.textContent="Saved ✓"; clearTimeout(save._t); save._t=setTimeout(function(){ s.textContent="Auto-saving…"; },1200); }
     }catch(e){ var s2=document.getElementById("status"); if(s2) s2.textContent="Saved (photos may exceed storage)"; }
   }
   function load(){ try{ var raw=localStorage.getItem(LS); if(raw){ var p=JSON.parse(raw); Object.assign(state, p); } }catch(e){} }
@@ -630,7 +630,7 @@
         chips.appendChild(b);
       });
       zh.appendChild(chips); wrap.appendChild(zh);
-      var ta=el("textarea"); ta.setAttribute("data-k",key); ta.placeholder="Findings in this areaâ¦";
+      var ta=el("textarea"); ta.setAttribute("data-k",key); ta.placeholder="Findings in this area…";
       if(state.fields[key]!=null) ta.value=state.fields[key];
       ta.addEventListener("input", function(){ state.fields[key]=ta.value; save(); });
       wrap.appendChild(ta);
@@ -646,7 +646,7 @@
       var card=el("div","photo");
       var iw=el("div","imgwrap");
       var img=el("img"); img.src=ph.data; img.alt="Evidence photo "+(i+1); iw.appendChild(img);
-      var rm=el("button","rm no-print","â"); rm.title="Remove";
+      var rm=el("button","rm no-print","✕"); rm.title="Remove";
       rm.addEventListener("click", function(){ state.photos.splice(i,1); renderPhotos(); save(); });
       iw.appendChild(rm); card.appendChild(iw);
       var meta=el("div","meta");
@@ -755,7 +755,7 @@
   function syncForPrint(){
     document.querySelectorAll(".print-value[data-for]").forEach(function(n){ n.remove(); });
     document.querySelectorAll("textarea[data-k], textarea").forEach(function(ta){
-      var pv=el("div","print-value"); pv.setAttribute("data-for","1"); pv.textContent=ta.value||"â";
+      var pv=el("div","print-value"); pv.setAttribute("data-for","1"); pv.textContent=ta.value||"—";
       ta.parentNode.insertBefore(pv, ta.nextSibling);
     });
     // contact header for print
@@ -763,7 +763,7 @@
     if(c){
       var f=state.fields;
       var parts=[f.co_phone,f.co_email,f.co_web,(f.co_license?("Lic. "+f.co_license):"")].filter(function(x){return x;});
-      c.textContent=parts.join("   Â·   ");
+      c.textContent=parts.join("   ·   ");
     }
   }
   window.addEventListener("beforeprint", syncForPrint);
